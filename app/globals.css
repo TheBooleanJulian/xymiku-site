@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --color-black: #000000;
+  --color-deep: #050709;
+  --color-cyan: #39e6f2;
+  --color-cyan-bright: #00f5ff;
+  --color-cyan-panel: #06343a;
+  --color-ink: #eafeff;
+  --color-mute: #7e8a8d;
+}
+
+@theme inline {
+  --color-black: var(--color-black);
+  --color-deep: var(--color-deep);
+  --color-cyan: var(--color-cyan);
+  --color-cyan-bright: var(--color-cyan-bright);
+  --color-cyan-panel: var(--color-cyan-panel);
+  --color-ink: var(--color-ink);
+  --color-mute: var(--color-mute);
+  --font-display: var(--font-space-grotesk);
+  --font-technical: var(--font-jetbrains-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-black);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-black);
+  color: var(--color-ink);
+  font-family: var(--font-space-grotesk), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-cyan);
+  color: var(--color-black);
+}
+
+.font-technical {
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+/* Thin scanning grid overlay, used sparingly as a texture layer */
+.scan-grid {
+  background-image:
+    linear-gradient(rgba(57, 230, 242, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 230, 242, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.text-glow {
+  text-shadow: 0 0 16px rgba(57, 230, 242, 0.45);
+}
+
+.border-glow {
+  box-shadow: 0 0 24px rgba(57, 230, 242, 0.12);
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(57, 230, 242, 0.08) 50%,
+    transparent 100%
+  );
+  animation: scanline 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .scanline::after {
+    display: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-black);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(57, 230, 242, 0.25);
+}
