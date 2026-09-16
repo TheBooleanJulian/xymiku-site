@@ -114,7 +114,7 @@ function Bar({ index }: { index: number }) {
   const height = Math.round(Math.max(12, Math.min(92, base)) * 100) / 100;
   return (
     <motion.div
-      className="w-[3px] rounded-full bg-gradient-to-t from-cyan/40 to-cyan"
+      className="w-[2px] rounded-full bg-gradient-to-t from-cyan/30 via-cyan to-signal"
       style={{ height: `${height}%` }}
       animate={{ scaleY: [1, 0.45, 1] }}
       transition={{
@@ -141,8 +141,8 @@ function SignalPanel() {
         <p className="font-technical text-[9px] tracking-[0.2em] text-mute">
           CHANNEL 39 // XYMIKU39
         </p>
-        <div className="flex h-16 items-end gap-[3px]">
-          {Array.from({ length: 26 }).map((_, i) => (
+        <div className="flex h-16 items-end gap-[2px]">
+          {Array.from({ length: 40 }).map((_, i) => (
             <Bar key={i} index={i} />
           ))}
         </div>
@@ -178,8 +178,10 @@ function SignalPanel() {
           <p className="mb-1 font-technical text-[8px] tracking-[0.15em] text-mute">
             ARCHIVE SYNC
           </p>
-          <div className="h-1 w-full overflow-hidden rounded-full bg-cyan/15">
-            <div className="h-full w-[39%] rounded-full bg-cyan" />
+          <div className="segment-meter h-2 w-full">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <span key={i} data-filled={i < 4} />
+            ))}
           </div>
         </div>
       </div>
@@ -245,8 +247,8 @@ export function Hero() {
       <div className="absolute inset-0 scanline" />
 
       {/* status strip */}
-      <div className="relative z-10 flex flex-wrap items-center gap-x-6 gap-y-1 px-4 pt-24 font-technical text-[10px] tracking-[0.2em] text-cyan/80 sm:px-6">
-        <span className="flex items-center gap-1.5">
+      <div className="relative z-10 flex flex-wrap items-center gap-x-6 gap-y-2 px-4 pt-24 font-technical text-[10px] tracking-[0.2em] text-cyan/80 sm:px-6">
+        <span className="hud-badge">
           <span className="h-1.5 w-1.5 rounded-full bg-cyan pulse-dot" />
           SYSTEM STATUS: ONLINE
         </span>
@@ -280,9 +282,18 @@ export function Hero() {
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <a
               href="#photo-delivery"
-              className="flex-1 border border-cyan bg-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
+              style={{
+                clipPath:
+                  "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
+              }}
+              className="flex-1 bg-gradient-to-r from-cyan to-signal px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
             >
-              FIND YOUR PHOTOS
+              <span className="block font-display text-sm font-bold tracking-[0.15em]">
+                FIND YOUR PHOTOS
+              </span>
+              <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
+                ARCHIVE ACCESS // READY
+              </span>
             </a>
             <a
               href="#archive"

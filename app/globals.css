@@ -8,6 +8,7 @@
   --color-cyan-panel: #06343a;
   --color-ink: #eafeff;
   --color-mute: #7e8a8d;
+  --color-signal: #ff3fa4;
 }
 
 @theme inline {
@@ -18,6 +19,7 @@
   --color-cyan-panel: var(--color-cyan-panel);
   --color-ink: var(--color-ink);
   --color-mute: var(--color-mute);
+  --color-signal: var(--color-signal);
   --font-display: var(--font-space-grotesk);
   --font-technical: var(--font-jetbrains-mono);
 }
@@ -124,6 +126,30 @@ body {
   right: -1px;
   border-bottom: 1px solid var(--color-cyan);
   border-right: 1px solid var(--color-cyan);
+}
+
+/* Bordered status badge, for a single call-out status rather than every line */
+.hud-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border: 1px solid rgba(57, 230, 242, 0.4);
+  background: rgba(57, 230, 242, 0.08);
+  padding: 0.2em 0.65em;
+}
+
+/* Chunky segmented meter, an alternative to a smooth progress bar */
+.segment-meter {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 3px;
+}
+.segment-meter > span {
+  height: 100%;
+  background: rgba(57, 230, 242, 0.15);
+}
+.segment-meter > span[data-filled="true"] {
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-signal));
 }
 
 @media (prefers-reduced-motion: reduce) {
