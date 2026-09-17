@@ -1,4 +1,7 @@
+"use client";
+
 import { captureMeta, visualSignal } from "@/lib/mock-data";
+import { HarmonicBars, Waveform } from "./SignalWidgets";
 
 export function VisualSynthesis() {
   return (
@@ -8,7 +11,20 @@ export function VisualSynthesis() {
           ◆ VISUAL SIGNAL PROCESSING
         </p>
 
-        <div className="mt-8 grid gap-px overflow-hidden border border-cyan/15 bg-cyan/15 sm:grid-cols-2">
+        <div className="mt-6 border border-cyan/15 bg-black p-5">
+          <p className="mb-3 font-technical text-[10px] tracking-[0.2em] text-mute">
+            FREQUENCY ANALYSIS
+          </p>
+          <Waveform variant={1} accent="signal" />
+          <p className="mb-3 mt-5 font-technical text-[10px] tracking-[0.2em] text-mute">
+            HARMONICS
+          </p>
+          <div className="h-14">
+            <HarmonicBars count={32} />
+          </div>
+        </div>
+
+        <div className="mt-px grid gap-px overflow-hidden border border-cyan/15 bg-cyan/15 sm:grid-cols-2">
           <div className="bg-black p-5">
             <p className="mb-4 font-technical text-[10px] tracking-[0.2em] text-mute">
               SIGNAL

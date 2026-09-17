@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { AmbientParticles } from "@/components/AmbientParticles";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -32,8 +33,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-black text-ink">
-        {children}
+      <body className="relative min-h-full flex flex-col bg-black text-ink">
+        <AmbientParticles />
+        <div className="relative z-10 flex min-h-full flex-col">{children}</div>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import { Bar, Knob, Waveform } from "./SignalWidgets";
 import { visualSignal, captureMeta } from "@/lib/mock-data";
 import type { ArchiveImage } from "@/lib/types";
 
@@ -16,87 +17,6 @@ const heroImage: ArchiveImage = {
 };
 
 const MIKU_LINES = ["MOMENTOUS", "IMAGES", "KEPT", "UNFORGETTABLE"];
-
-const WAVE_PATHS = [
-  "M0 20 C 10 4, 20 4, 30 20 S 50 36, 60 20 S 80 4, 90 20 S 110 36, 120 20",
-  "M0 20 L10 6 L20 32 L30 10 L40 28 L50 8 L60 30 L70 12 L80 26 L90 10 L100 24 L110 14 L120 20",
-  "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
-];
-
-function Waveform({
-  variant = 0,
-  accent = "cyan",
-}: {
-  variant?: 0 | 1 | 2;
-  accent?: "cyan" | "signal";
-}) {
-  const prefersReducedMotion = useReducedMotion();
-  const stroke =
-    accent === "signal" ? "var(--color-signal)" : "var(--color-cyan)";
-
-  return (
-    <svg viewBox="0 0 120 40" className="h-10 w-full overflow-visible">
-      <motion.path
-        d={WAVE_PATHS[variant]}
-        fill="none"
-        stroke={stroke}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        opacity={0.85}
-        initial={false}
-        animate={
-          prefersReducedMotion
-            ? { pathLength: 1, pathOffset: 0 }
-            : { pathOffset: [0, 0.55, 0] }
-        }
-        style={prefersReducedMotion ? undefined : { pathLength: 0.5 }}
-        transition={{
-          duration: 3.2 + variant * 0.6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-    </svg>
-  );
-}
-
-function Knob({
-  label,
-  angle,
-  accent = "cyan",
-}: {
-  label: string;
-  angle: number;
-  accent?: "cyan" | "signal";
-}) {
-  const prefersReducedMotion = useReducedMotion();
-  const borderClass = accent === "signal" ? "border-signal/40" : "border-cyan/40";
-  const needleClass = accent === "signal" ? "bg-signal" : "bg-cyan";
-
-  return (
-    <div className="flex flex-col items-center gap-1.5">
-      <div className={`relative h-6 w-6 rounded-full border ${borderClass}`}>
-        <motion.span
-          className={`absolute left-1/2 top-1/2 h-2 w-px origin-top ${needleClass}`}
-          style={{ x: "-50%" }}
-          animate={
-            prefersReducedMotion
-              ? { rotate: angle }
-              : { rotate: [angle - 5, angle + 5, angle - 5] }
-          }
-          transition={
-            prefersReducedMotion
-              ? undefined
-              : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
-          }
-        />
-      </div>
-      <span className="font-technical text-[8px] tracking-[0.15em] text-mute">
-        {label}
-      </span>
-    </div>
-  );
-}
 
 function CaptureModulePanel() {
   return (
@@ -150,24 +70,6 @@ function CaptureModulePanel() {
         ))}
       </div>
     </div>
-  );
-}
-
-function Bar({ index }: { index: number }) {
-  const base = 30 + 22 * Math.sin(index * 0.7) + 14 * Math.sin(index * 1.9);
-  const height = Math.round(Math.max(12, Math.min(92, base)) * 100) / 100;
-  return (
-    <motion.div
-      className="w-[2px] rounded-full bg-gradient-to-t from-cyan/30 via-cyan to-signal"
-      style={{ height: `${height}%` }}
-      animate={{ scaleY: [1, 0.45, 1] }}
-      transition={{
-        duration: 1.4 + (index % 5) * 0.2,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: (index % 7) * 0.08,
-      }}
-    />
   );
 }
 

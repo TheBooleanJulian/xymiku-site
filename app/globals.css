@@ -163,6 +163,23 @@ body {
   background: linear-gradient(90deg, var(--color-cyan), var(--color-signal));
 }
 
+@keyframes ambient-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
