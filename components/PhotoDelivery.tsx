@@ -5,7 +5,7 @@ import { ArchivePlaceholder } from "./ArchivePlaceholder";
 
 const STATUS_LABEL: Record<string, string> = {
   online: "ARCHIVE ONLINE",
-  processing: "PROCESSING",
+  processing: "⚠ NOT YET INDEXED",
   archived: "ARCHIVED",
 };
 
@@ -72,12 +72,18 @@ export function PhotoDelivery() {
                 <p className="mt-1 font-technical text-xs text-mute">
                   {event.imageCount.toLocaleString()} IMAGES
                 </p>
-                <p className="mt-2 flex items-center gap-1.5 font-technical text-[10px] tracking-[0.15em] text-cyan">
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full bg-cyan ${event.status === "online" ? "pulse-dot" : ""}`}
-                  />
-                  {STATUS_LABEL[event.status]}
-                </p>
+                {event.status === "processing" ? (
+                  <p className="hud-badge-alert mt-2 font-technical text-[10px] tracking-[0.15em]">
+                    {STATUS_LABEL[event.status]}
+                  </p>
+                ) : (
+                  <p className="mt-2 flex items-center gap-1.5 font-technical text-[10px] tracking-[0.15em] text-cyan">
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full bg-cyan ${event.status === "online" ? "pulse-dot" : ""}`}
+                    />
+                    {STATUS_LABEL[event.status]}
+                  </p>
+                )}
               </div>
             </a>
           ))}

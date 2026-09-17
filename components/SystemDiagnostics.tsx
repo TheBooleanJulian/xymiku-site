@@ -2,7 +2,7 @@ import { diagnostics } from "@/lib/mock-data";
 
 export function SystemDiagnostics() {
   return (
-    <section className="border-b border-cyan/15 bg-deep/60 px-4 py-10 sm:px-6">
+    <section className="scan-grid border-b border-cyan/15 bg-deep/60 px-4 py-10 sm:px-6">
       <div className="mx-auto max-w-7xl">
         <p className="mb-6 font-technical text-[11px] tracking-[0.3em] text-cyan">
           ◆ SYSTEM DIAGNOSTICS

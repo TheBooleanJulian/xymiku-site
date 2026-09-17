@@ -38,6 +38,14 @@ export function CharacterIndex() {
                 <p className="font-display text-sm font-bold leading-tight text-ink">
                   {c.name}
                 </p>
+                <div className="segment-meter mt-2 h-1.5 w-full">
+                  {Array.from({ length: 10 }).map((_, i) => (
+                    <span
+                      key={i}
+                      data-filled={i < Math.min(10, Math.max(1, Math.round(c.count / 500)))}
+                    />
+                  ))}
+                </div>
               </div>
             </a>
           ))}

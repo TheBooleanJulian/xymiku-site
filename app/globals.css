@@ -138,6 +138,17 @@ body {
   padding: 0.2em 0.65em;
 }
 
+/* Signal-colored variant for warnings / pending states, e.g. unindexed archive entries */
+.hud-badge-alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border: 1px solid rgba(255, 63, 164, 0.45);
+  background: rgba(255, 63, 164, 0.08);
+  padding: 0.2em 0.65em;
+  color: var(--color-signal);
+}
+
 /* Chunky segmented meter, an alternative to a smooth progress bar */
 .segment-meter {
   display: grid;

@@ -37,19 +37,27 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-1 border-t border-cyan/15 pt-6 font-technical text-[10px] tracking-wide text-mute">
-          <span>© 2026 XYMIKU39</span>
-          <span>
-            BUILT BY{" "}
-            <a
-              href="https://thebooleanjulian.dev"
-              target="_blank"
-              rel="noopener"
-              className="text-cyan"
-            >
-              THEBOOLEANJULIAN
-            </a>
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-cyan/15 pt-6 font-technical text-[10px] tracking-wide text-mute">
+          <div className="flex flex-col gap-1">
+            <span>© 2026 XYMIKU39</span>
+            <span>
+              BUILT BY{" "}
+              <a
+                href="https://thebooleanjulian.dev"
+                target="_blank"
+                rel="noopener"
+                className="text-cyan"
+              >
+                THEBOOLEANJULIAN
+              </a>
+            </span>
+          </div>
+          <a
+            href="/admin"
+            className="tracking-[0.15em] text-mute/60 transition-colors hover:text-cyan"
+          >
+            [{"⚙"} ADMIN]
+          </a>
         </div>
       </div>
     </footer>
