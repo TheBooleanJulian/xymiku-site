@@ -27,8 +27,8 @@ export default function Home() {
         <VisualSynthesis />
         <SectionDivider
           headline="ARCHIVE SYNTHESIS COMPLETE //"
-          highlight="2016—2026"
-          subtext="TEN YEARS OF SIGNAL, ORGANIZED BY XYMIKU.39"
+          highlight="2021—2026"
+          subtext="FIVE YEARS OF SIGNAL, ORGANIZED BY XYMIKU.39"
         />
         <MikuSignature />
       </main>

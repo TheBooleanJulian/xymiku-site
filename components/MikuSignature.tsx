@@ -19,7 +19,7 @@ export function MikuSignature() {
           ))}
         </div>
         <p className="font-technical text-[10px] tracking-[0.2em] text-mute">
-          SYNTHESIS COMPLETE // 2016 {"→"} 2026
+          SYNTHESIS COMPLETE // 2021 {"→"} 2026
         </p>
       </div>
     </section>
