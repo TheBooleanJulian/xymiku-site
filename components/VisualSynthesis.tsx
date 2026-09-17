@@ -19,7 +19,9 @@ export function VisualSynthesis() {
                   <dt className="font-technical text-xs tracking-wide text-mute">
                     {v.label}
                   </dt>
-                  <dd className="font-technical text-xs text-cyan">
+                  <dd
+                    className={`font-technical text-xs ${v.label === "SATURATION" ? "text-signal" : "text-cyan"}`}
+                  >
                     {v.value}
                   </dd>
                 </div>

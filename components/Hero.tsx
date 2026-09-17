@@ -23,28 +23,72 @@ const WAVE_PATHS = [
   "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
 ];
 
-function Waveform({ variant = 0 }: { variant?: 0 | 1 | 2 }) {
+function Waveform({
+  variant = 0,
+  accent = "cyan",
+}: {
+  variant?: 0 | 1 | 2;
+  accent?: "cyan" | "signal";
+}) {
+  const prefersReducedMotion = useReducedMotion();
+  const stroke =
+    accent === "signal" ? "var(--color-signal)" : "var(--color-cyan)";
+
   return (
     <svg viewBox="0 0 120 40" className="h-10 w-full overflow-visible">
-      <path
+      <motion.path
         d={WAVE_PATHS[variant]}
         fill="none"
-        stroke="var(--color-cyan)"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
-        opacity={0.8}
+        opacity={0.85}
+        initial={false}
+        animate={
+          prefersReducedMotion
+            ? { pathLength: 1, pathOffset: 0 }
+            : { pathOffset: [0, 0.55, 0] }
+        }
+        style={prefersReducedMotion ? undefined : { pathLength: 0.5 }}
+        transition={{
+          duration: 3.2 + variant * 0.6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
       />
     </svg>
   );
 }
 
-function Knob({ label, angle }: { label: string; angle: number }) {
+function Knob({
+  label,
+  angle,
+  accent = "cyan",
+}: {
+  label: string;
+  angle: number;
+  accent?: "cyan" | "signal";
+}) {
+  const prefersReducedMotion = useReducedMotion();
+  const borderClass = accent === "signal" ? "border-signal/40" : "border-cyan/40";
+  const needleClass = accent === "signal" ? "bg-signal" : "bg-cyan";
+
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <div className="relative h-6 w-6 rounded-full border border-cyan/40">
-        <span
-          className="absolute left-1/2 top-1/2 h-2 w-px origin-top bg-cyan"
-          style={{ transform: `translate(-50%, 0) rotate(${angle}deg)` }}
+      <div className={`relative h-6 w-6 rounded-full border ${borderClass}`}>
+        <motion.span
+          className={`absolute left-1/2 top-1/2 h-2 w-px origin-top ${needleClass}`}
+          style={{ x: "-50%" }}
+          animate={
+            prefersReducedMotion
+              ? { rotate: angle }
+              : { rotate: [angle - 5, angle + 5, angle - 5] }
+          }
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
+          }
         />
       </div>
       <span className="font-technical text-[8px] tracking-[0.15em] text-mute">
@@ -69,7 +113,7 @@ function CaptureModulePanel() {
         <div className="flex justify-between">
           <Knob label="EV" angle={40} />
           <Knob label="WB" angle={-20} />
-          <Knob label="ISO" angle={80} />
+          <Knob label="ISO" angle={80} accent="signal" />
         </div>
       </div>
 
@@ -81,7 +125,7 @@ function CaptureModulePanel() {
         <div className="flex justify-between">
           <Knob label="FOCUS" angle={-60} />
           <Knob label="GRAIN" angle={10} />
-          <Knob label="TONE" angle={55} />
+          <Knob label="TONE" angle={55} accent="signal" />
         </div>
       </div>
 
@@ -89,11 +133,11 @@ function CaptureModulePanel() {
         <p className="font-technical text-[9px] tracking-[0.2em] text-mute">
           COLOR RESPONSE
         </p>
-        <Waveform variant={2} />
+        <Waveform variant={2} accent="signal" />
         <div className="flex justify-between">
           <Knob label="HUE" angle={-40} />
           <Knob label="SAT" angle={30} />
-          <Knob label="LUM" angle={-10} />
+          <Knob label="LUM" angle={-10} accent="signal" />
         </div>
       </div>
 

@@ -13,7 +13,9 @@ export function SystemDiagnostics() {
               <p className="font-technical text-[9px] tracking-[0.2em] text-mute">
                 {stat.label}
               </p>
-              <p className="mt-2 font-display text-lg font-bold text-ink">
+              <p
+                className={`mt-2 font-display text-lg font-bold ${stat.label === "SIGNAL" ? "text-signal" : "text-ink"}`}
+              >
                 {stat.value}
               </p>
             </div>
