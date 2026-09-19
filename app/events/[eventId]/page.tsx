@@ -6,6 +6,10 @@ import { getAllEventIds, getEvent, getEventImages } from "@/lib/data";
 
 export async function generateStaticParams() {
   const ids = await getAllEventIds();
+  // "output: export" requires at least one generated path per dynamic route.
+  // Before any event is registered, fall back to a placeholder id that
+  // resolves to notFound() below rather than failing the build.
+  if (ids.length === 0) return [{ eventId: "_none" }];
   return ids.map((eventId) => ({ eventId }));
 }
 
