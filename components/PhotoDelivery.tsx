@@ -26,13 +26,11 @@ export function PhotoDelivery({ events: recentEvents }: { events: UplinkEvent[] 
           Looking for photographs from an event?
         </p>
 
-        <form
-          className="mt-8 flex flex-col gap-3 sm:flex-row"
-          onSubmit={(e) => e.preventDefault()}
-        >
+        <form action="/gallery" method="get" className="mt-8 flex flex-col gap-3 sm:flex-row">
           <input
             type="search"
-            placeholder="Search event / cosplayer / character"
+            name="q"
+            placeholder="Search event"
             className="flex-1 border border-cyan/30 bg-black px-4 py-4 font-technical text-sm text-ink placeholder:text-mute focus:border-cyan focus:outline-none"
           />
           <button
@@ -90,6 +88,13 @@ export function PhotoDelivery({ events: recentEvents }: { events: UplinkEvent[] 
             </a>
           ))}
         </div>
+
+        <a
+          href="/gallery"
+          className="mt-8 inline-block border border-cyan/30 px-6 py-3 font-technical text-xs tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10"
+        >
+          VIEW ALL EVENTS →
+        </a>
       </div>
     </section>
   );

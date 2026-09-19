@@ -89,6 +89,29 @@ export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
   return Promise.all(((data ?? []) as EventRow[]).map(eventToUplinkEvent));
 }
 
+// Lists every event without querying LuxSync/Drive per row — building a
+// gallery link and (when set) a cover is free string-building, but a real
+// imageCount needs the Drive folder actually listed, and LuxSync's
+// /api/gallery is rate-limited to 20/min. Fine for the homepage's 6 "recent"
+// cards (getRecentEvents), not for potentially the whole archive at once.
+export async function getAllEvents(): Promise<UplinkEvent[]> {
+  const { data, error } = await supabase
+    .from("events")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
+    .order("event_date", { ascending: false });
+  if (error) throw error;
+
+  return ((data ?? []) as EventRow[]).map((row) => ({
+    id: row.id,
+    name: row.name,
+    date: formatDate(row.event_date),
+    imageCount: 0,
+    status: row.status,
+    cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
+    galleryUrl: row.drive_folder_id ? driveGalleryUrl(row.drive_folder_id) : row.external_url || "/",
+  }));
+}
+
 export async function getTimelineImages(): Promise<UplinkImage[]> {
   const { data, error } = await supabase
     .from("curated_images")
