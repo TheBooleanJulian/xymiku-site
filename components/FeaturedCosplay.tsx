@@ -1,7 +1,7 @@
-import { featuredCosplay } from "@/lib/mock-data";
+import type { ArchiveImage } from "@/lib/types";
 import { ArchivePlaceholder } from "./ArchivePlaceholder";
 
-export function FeaturedCosplay() {
+export function FeaturedCosplay({ images: featuredCosplay }: { images: ArchiveImage[] }) {
   return (
     <section className="border-b border-cyan/15 px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-7xl">

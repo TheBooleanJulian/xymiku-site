@@ -11,19 +11,34 @@ import { SectionDivider } from "@/components/SectionDivider";
 import { MikuSignature } from "@/components/MikuSignature";
 import { SignalDivider } from "@/components/SignalDivider";
 import { Footer } from "@/components/Footer";
+import {
+  getRecentEvents,
+  getTimelineImages,
+  getCharacterIndex,
+  getFeaturedCosplay,
+  getPortfolioWork,
+} from "@/lib/data";
 
-export default function Home() {
+export default async function Home() {
+  const [events, timelineImages, characters, featuredCosplay, portfolioWork] = await Promise.all([
+    getRecentEvents(),
+    getTimelineImages(),
+    getCharacterIndex(),
+    getFeaturedCosplay(),
+    getPortfolioWork(),
+  ]);
+
   return (
     <>
       <Header />
       <main>
         <Hero />
         <SystemDiagnostics />
-        <PhotoDelivery />
-        <ArchiveTimeline />
-        <CharacterIndex />
-        <FeaturedCosplay />
-        <Portfolio />
+        <PhotoDelivery events={events} />
+        <ArchiveTimeline images={timelineImages} />
+        <CharacterIndex characters={characters} />
+        <FeaturedCosplay images={featuredCosplay} />
+        <Portfolio work={portfolioWork} />
         <VisualSynthesis />
         <SectionDivider
           headline="ARCHIVE SYNTHESIS COMPLETE //"

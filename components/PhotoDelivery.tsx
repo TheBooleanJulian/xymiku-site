@@ -1,6 +1,6 @@
 "use client";
 
-import { recentEvents } from "@/lib/mock-data";
+import type { ArchiveEvent } from "@/lib/types";
 import { ArchivePlaceholder } from "./ArchivePlaceholder";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -9,7 +9,7 @@ const STATUS_LABEL: Record<string, string> = {
   archived: "ARCHIVED",
 };
 
-export function PhotoDelivery() {
+export function PhotoDelivery({ events: recentEvents }: { events: ArchiveEvent[] }) {
   return (
     <section
       id="photo-delivery"
@@ -47,7 +47,7 @@ export function PhotoDelivery() {
           {recentEvents.map((event) => (
             <a
               key={event.id}
-              href="#"
+              href={`/events/${event.id}`}
               className="group border border-cyan/15 bg-deep/40 transition-colors hover:border-cyan/50"
             >
               <ArchivePlaceholder

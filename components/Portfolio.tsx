@@ -1,7 +1,13 @@
-import { portfolioWork } from "@/lib/mock-data";
+import type { ArchiveImage } from "@/lib/types";
 import { ArchivePlaceholder } from "./ArchivePlaceholder";
 
-export function Portfolio() {
+type PortfolioCategory = "COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL";
+
+export function Portfolio({
+  work: portfolioWork,
+}: {
+  work: Record<PortfolioCategory, ArchiveImage[]>;
+}) {
   return (
     <section id="portfolio" className="border-b border-cyan/15 px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-7xl">

@@ -1,7 +1,7 @@
-import { characterIndex } from "@/lib/mock-data";
+import type { CharacterCategory } from "@/lib/types";
 import { ArchivePlaceholder } from "./ArchivePlaceholder";
 
-export function CharacterIndex() {
+export function CharacterIndex({ characters: characterIndex }: { characters: CharacterCategory[] }) {
   return (
     <section className="border-b border-cyan/15 px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-7xl">

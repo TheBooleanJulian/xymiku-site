@@ -1,7 +1,7 @@
-import { timelineImages } from "@/lib/mock-data";
+import type { ArchiveImage } from "@/lib/types";
 import { ArchivePlaceholder } from "./ArchivePlaceholder";
 
-export function ArchiveTimeline() {
+export function ArchiveTimeline({ images: timelineImages }: { images: ArchiveImage[] }) {
   return (
     <section id="archive" className="border-b border-cyan/15 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
