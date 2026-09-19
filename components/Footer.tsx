@@ -1,7 +1,6 @@
 const SOCIALS = [
   { label: "INSTAGRAM", href: "https://www.instagram.com/xymiku.39/" },
-  { label: "TWITTER / X", href: "#" },
-  { label: "EMAIL", href: "#" },
+  { label: "EMAIL", href: "mailto:xymiku.39@xymiku39.com" },
 ];
 
 export function Footer() {

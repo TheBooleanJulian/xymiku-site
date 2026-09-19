@@ -133,30 +133,6 @@ export async function getFeaturedCosplay(limit = 6): Promise<UplinkImage[]> {
   return ((data ?? []) as CuratedImageRow[]).map(mapCuratedRow);
 }
 
-export async function getPortfolioWork(): Promise<
-  Record<"COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL", UplinkImage[]>
-> {
-  const { data, error } = await supabase
-    .from("curated_images")
-    .select("id,drive_file_id,category,year,character,cosplayer,event_label")
-    .eq("portfolio_pick", true)
-    .order("year", { ascending: false });
-  if (error) throw error;
-
-  const grouped: Record<"COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL", UplinkImage[]> = {
-    COSPLAY: [],
-    EVENT: [],
-    PORTRAIT: [],
-    CONCEPTUAL: [],
-  };
-  for (const row of (data ?? []) as CuratedImageRow[]) {
-    const image = mapCuratedRow(row);
-    const key = image.category.toUpperCase() as keyof typeof grouped;
-    grouped[key].push(image);
-  }
-  return grouped;
-}
-
 export async function getCharacterIndex(): Promise<CharacterCategory[]> {
   const [{ data: chars, error: charsError }, { data: images, error: imagesError }] = await Promise.all([
     supabase.from("characters").select("id,name,designation,href,cover_drive_file_id"),
