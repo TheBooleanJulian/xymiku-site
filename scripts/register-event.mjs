@@ -4,8 +4,9 @@
 // Usage:
 //   node scripts/register-event.mjs \
 //     --event-id afa-2026 --event-name "AFA 2026" --event-date 2026-09-12 \
-//     --drive-folder-id 1Hicrzj1HwGDV_jwIBvETbR76DVwrRZwj \
-//     [--status online] [--cover-file-id <a specific Drive file id>]
+//     [--drive-folder-id 1Hicrzj1HwGDV_jwIBvETbR76DVwrRZwj] \
+//     [--status online] [--cover-file-id <a specific Drive file id>] \
+//     [--external-url <link to use until a Drive folder exists>]
 //
 // There is no file upload here: the photos already live in the Drive folder
 // (the usual PhotoVault workflow) and LuxSync reads/caches them directly.
@@ -16,6 +17,12 @@
 // the site just uses whichever file Drive reports as created first in the
 // folder — often not the most flattering shot. Grab a file id from the
 // folder's LuxSync gallery URL or listing.
+//
+// --drive-folder-id can be omitted for a shoot that hasn't been organized
+// into a Drive folder yet (e.g. --status processing) — the card then falls
+// back to --external-url (a preview gallery hosted elsewhere) or just links
+// to the homepage if neither is set. Re-run with --drive-folder-id once the
+// real folder exists to switch the card over to it.
 //
 // Requires .env.local with NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
 // (the service role key, NOT the anon key — RLS blocks writes from the anon key).
@@ -38,7 +45,7 @@ function parseArgs(argv) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  const required = ["event-id", "event-name", "event-date", "drive-folder-id"];
+  const required = ["event-id", "event-name", "event-date"];
   const missing = required.filter((k) => !args[k]);
   if (missing.length) {
     console.error(`Missing required args: ${missing.map((k) => `--${k}`).join(", ")}`);
@@ -58,14 +65,20 @@ async function main() {
     name: args["event-name"],
     event_date: args["event-date"],
     status: args.status ?? "online",
-    drive_folder_id: args["drive-folder-id"],
+    drive_folder_id: args["drive-folder-id"] || null,
   };
   if (args["cover-file-id"]) row.cover_drive_file_id = args["cover-file-id"];
+  if (args["external-url"]) row.external_url = args["external-url"];
 
   const { error } = await supabase.from("events").upsert(row);
   if (error) throw error;
 
-  console.log(`Registered "${args["event-name"]}" -> Drive folder ${args["drive-folder-id"]}.`);
+  const dest = args["drive-folder-id"]
+    ? `Drive folder ${args["drive-folder-id"]}`
+    : args["external-url"]
+      ? `external link ${args["external-url"]}`
+      : "the homepage (no folder or external link set)";
+  console.log(`Registered "${args["event-name"]}" -> ${dest}.`);
   console.log(`Run "npm run build" to regenerate the static site with this gallery live.`);
 }
 

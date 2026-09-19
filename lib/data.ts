@@ -7,8 +7,9 @@ type EventRow = {
   name: string;
   event_date: string;
   status: UplinkEvent["status"];
-  drive_folder_id: string;
+  drive_folder_id: string | null;
   cover_drive_file_id: string | null;
+  external_url: string | null;
 };
 
 type CuratedImageRow = {
@@ -50,6 +51,20 @@ function mapCuratedRow(row: CuratedImageRow): UplinkImage {
 }
 
 async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
+  if (!row.drive_folder_id) {
+    // No Drive folder yet — nothing to list or link to on LuxSync. Fall
+    // back to an external preview link if one was given, else the homepage.
+    return {
+      id: row.id,
+      name: row.name,
+      date: formatDate(row.event_date),
+      imageCount: 0,
+      status: row.status,
+      cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
+      galleryUrl: row.external_url || "/",
+    };
+  }
+
   const { files } = await listDriveFolder(row.drive_folder_id);
   const sorted = [...files].sort((a, b) => a.createdTime.localeCompare(b.createdTime));
   const coverFileId = row.cover_drive_file_id ?? sorted[0]?.id;
@@ -67,7 +82,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
 export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
     .order("event_date", { ascending: false })
     .limit(limit);
   if (error) throw error;

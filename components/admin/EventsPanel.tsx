@@ -10,6 +10,7 @@ type EventRow = {
   status: "online" | "processing" | "archived";
   drive_folder_id: string;
   cover_drive_file_id: string | null;
+  external_url: string | null;
 };
 
 const BLANK: EventRow = {
@@ -19,6 +20,7 @@ const BLANK: EventRow = {
   status: "online",
   drive_folder_id: "",
   cover_drive_file_id: "",
+  external_url: "",
 };
 
 const input =
@@ -36,7 +38,7 @@ export function EventsPanel() {
   async function load() {
     const { data, error } = await supabase
       .from("events")
-      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
+      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
       .order("event_date", { ascending: false });
     if (error) setError(error.message);
     else setRows(data as EventRow[]);
@@ -47,7 +49,7 @@ export function EventsPanel() {
     (async () => {
       const { data, error } = await supabase
         .from("events")
-        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
+        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
         .order("event_date", { ascending: false });
       if (error) setError(error.message);
       else setRows(data as EventRow[]);
@@ -57,7 +59,11 @@ export function EventsPanel() {
 
   function startEdit(row: EventRow) {
     setEditingId(row.id);
-    setDraft({ ...row, cover_drive_file_id: row.cover_drive_file_id ?? "" });
+    setDraft({
+      ...row,
+      cover_drive_file_id: row.cover_drive_file_id ?? "",
+      external_url: row.external_url ?? "",
+    });
   }
 
   async function saveEdit() {
@@ -69,8 +75,9 @@ export function EventsPanel() {
         name: draft.name,
         event_date: draft.event_date,
         status: draft.status,
-        drive_folder_id: draft.drive_folder_id,
+        drive_folder_id: draft.drive_folder_id || null,
         cover_drive_file_id: draft.cover_drive_file_id || null,
+        external_url: draft.external_url || null,
       })
       .eq("id", editingId);
     setSaving(false);
@@ -99,8 +106,9 @@ export function EventsPanel() {
       name: creating.name,
       event_date: creating.event_date,
       status: creating.status,
-      drive_folder_id: creating.drive_folder_id,
+      drive_folder_id: creating.drive_folder_id || null,
       cover_drive_file_id: creating.cover_drive_file_id || null,
+      external_url: creating.external_url || null,
     });
     setSaving(false);
     if (error) {
@@ -160,8 +168,7 @@ export function EventsPanel() {
         </select>
         <input
           className={input}
-          placeholder="drive_folder_id"
-          required
+          placeholder="drive_folder_id (optional if not organized yet)"
           value={creating.drive_folder_id}
           onChange={(e) => setCreating({ ...creating, drive_folder_id: e.target.value })}
         />
@@ -170,6 +177,12 @@ export function EventsPanel() {
           placeholder="cover_drive_file_id (optional)"
           value={creating.cover_drive_file_id ?? ""}
           onChange={(e) => setCreating({ ...creating, cover_drive_file_id: e.target.value })}
+        />
+        <input
+          className={input}
+          placeholder="external_url (used until drive_folder_id is set)"
+          value={creating.external_url ?? ""}
+          onChange={(e) => setCreating({ ...creating, external_url: e.target.value })}
         />
         <button
           type="submit"
@@ -193,6 +206,7 @@ export function EventsPanel() {
                 <th className="p-2">Status</th>
                 <th className="p-2">Drive folder</th>
                 <th className="p-2">Cover file</th>
+                <th className="p-2">External URL</th>
                 <th className="p-2" />
               </tr>
             </thead>
@@ -247,6 +261,13 @@ export function EventsPanel() {
                         }
                       />
                     </td>
+                    <td className="p-2">
+                      <input
+                        className={input}
+                        value={draft.external_url ?? ""}
+                        onChange={(e) => setDraft({ ...draft, external_url: e.target.value })}
+                      />
+                    </td>
                     <td className="whitespace-nowrap p-2">
                       <button
                         onClick={saveEdit}
@@ -266,8 +287,9 @@ export function EventsPanel() {
                     <td className="p-2 text-ink">{row.name}</td>
                     <td className="p-2 text-mute">{row.event_date}</td>
                     <td className="p-2 text-mute">{row.status}</td>
-                    <td className="p-2 text-mute">{row.drive_folder_id}</td>
+                    <td className="p-2 text-mute">{row.drive_folder_id || "—"}</td>
                     <td className="p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
+                    <td className="max-w-[160px] truncate p-2 text-mute">{row.external_url ?? "—"}</td>
                     <td className="whitespace-nowrap p-2">
                       <button onClick={() => startEdit(row)} className="mr-2 text-cyan hover:underline">
                         EDIT

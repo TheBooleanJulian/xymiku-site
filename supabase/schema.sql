@@ -13,10 +13,15 @@ create table if not exists events (
   name text not null,
   event_date date not null,
   status text not null default 'processing' check (status in ('online', 'processing', 'archived')),
-  drive_folder_id text not null,
+  -- Nullable: a "processing" event may not have its Drive folder set up yet.
+  drive_folder_id text,
   -- Optional manual pick for the homepage card's cover photo. When unset,
   -- falls back to the chronologically first file in drive_folder_id.
   cover_drive_file_id text,
+  -- Fallback link for events with no drive_folder_id yet (e.g. a preview
+  -- gallery hosted elsewhere). Ignored once drive_folder_id is set — the
+  -- card then always links to that folder's LuxSync gallery instead.
+  external_url text,
   created_at timestamptz not null default now()
 );
 
@@ -73,3 +78,10 @@ create policy "admin write curated_images" on curated_images for all
 create policy "admin write characters" on characters for all
   using (auth.jwt() ->> 'email' = 'ADMIN_EMAIL')
   with check (auth.jwt() ->> 'email' = 'ADMIN_EMAIL');
+
+-- Migration: events.external_url was added to the `create table` above after
+-- some projects' `events` table already existed, so `create table if not
+-- exists` silently skipped it on those. Re-run this statement (Database ->
+-- SQL Editor) if `next build` fails with "column events.external_url does
+-- not exist" — safe to run even if the column is already there.
+alter table events add column if not exists external_url text;
