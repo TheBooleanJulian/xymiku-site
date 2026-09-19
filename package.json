@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "serve -s out -l ${PORT:-3000}",
     "lint": "eslint",
-    "upload-shoot": "node scripts/upload-shoot.mjs"
+    "register-event": "node scripts/register-event.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
