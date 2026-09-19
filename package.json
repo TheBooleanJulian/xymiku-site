@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "serve -s out -l ${PORT:-3000}",
+    "start": "serve out -l ${PORT:-3000}",
     "lint": "eslint",
     "register-event": "node scripts/register-event.mjs"
   },
