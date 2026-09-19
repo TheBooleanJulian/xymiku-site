@@ -1,4 +1,4 @@
--- XYMiku39 archive schema.
+-- Xymiku.39 archive schema.
 -- Run this in the Supabase project's SQL editor (Database -> SQL Editor -> New query).
 --
 -- Photos themselves are NOT stored here or in Supabase Storage. Each event

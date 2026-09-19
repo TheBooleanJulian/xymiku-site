@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "XYMIKU39 // VISUAL ARCHIVE",
   description:
-    "Five years of Hatsune Miku cosplay photography — event delivery and historical archive by XYMiku39.",
+    "Five years of Hatsune Miku cosplay photography — event delivery and historical archive by Xymiku.39.",
 };
 
 export const viewport: Viewport = {

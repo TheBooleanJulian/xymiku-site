@@ -10,7 +10,7 @@ import type { ArchiveImage } from "@/lib/types";
 const heroImage: ArchiveImage = {
   id: "hero-main",
   src: "/mock/hero-main",
-  alt: "Hatsune Miku cosplay photography, XYMiku39 archive",
+  alt: "Hatsune Miku cosplay photography, Xymiku.39 archive",
   year: 2026,
   category: "cosplay",
   character: "Hatsune Miku",
