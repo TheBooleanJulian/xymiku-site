@@ -11,6 +11,7 @@ type EventRow = {
   drive_folder_id: string;
   cover_drive_file_id: string | null;
   external_url: string | null;
+  cover_position: "top" | "center" | "bottom";
 };
 
 const BLANK: EventRow = {
@@ -21,6 +22,7 @@ const BLANK: EventRow = {
   drive_folder_id: "",
   cover_drive_file_id: "",
   external_url: "",
+  cover_position: "center",
 };
 
 const input =
@@ -38,7 +40,7 @@ export function EventsPanel() {
   async function load() {
     const { data, error } = await supabase
       .from("events")
-      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
+      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
       .order("event_date", { ascending: false });
     if (error) setError(error.message);
     else setRows(data as EventRow[]);
@@ -49,7 +51,7 @@ export function EventsPanel() {
     (async () => {
       const { data, error } = await supabase
         .from("events")
-        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
+        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
         .order("event_date", { ascending: false });
       if (error) setError(error.message);
       else setRows(data as EventRow[]);
@@ -78,6 +80,7 @@ export function EventsPanel() {
         drive_folder_id: draft.drive_folder_id || null,
         cover_drive_file_id: draft.cover_drive_file_id || null,
         external_url: draft.external_url || null,
+        cover_position: draft.cover_position,
       })
       .eq("id", editingId);
     setSaving(false);
@@ -109,6 +112,7 @@ export function EventsPanel() {
       drive_folder_id: creating.drive_folder_id || null,
       cover_drive_file_id: creating.cover_drive_file_id || null,
       external_url: creating.external_url || null,
+      cover_position: creating.cover_position,
     });
     setSaving(false);
     if (error) {
@@ -184,6 +188,17 @@ export function EventsPanel() {
           value={creating.external_url ?? ""}
           onChange={(e) => setCreating({ ...creating, external_url: e.target.value })}
         />
+        <select
+          className={input}
+          value={creating.cover_position}
+          onChange={(e) =>
+            setCreating({ ...creating, cover_position: e.target.value as EventRow["cover_position"] })
+          }
+        >
+          <option value="center">cover crop: center</option>
+          <option value="top">cover crop: top</option>
+          <option value="bottom">cover crop: bottom</option>
+        </select>
         <button
           type="submit"
           disabled={saving}
@@ -207,6 +222,7 @@ export function EventsPanel() {
                 <th className="p-2">Drive folder</th>
                 <th className="p-2">Cover file</th>
                 <th className="p-2">External URL</th>
+                <th className="p-2">Crop</th>
                 <th className="p-2" />
               </tr>
             </thead>
@@ -268,6 +284,19 @@ export function EventsPanel() {
                         onChange={(e) => setDraft({ ...draft, external_url: e.target.value })}
                       />
                     </td>
+                    <td className="p-2">
+                      <select
+                        className={input}
+                        value={draft.cover_position}
+                        onChange={(e) =>
+                          setDraft({ ...draft, cover_position: e.target.value as EventRow["cover_position"] })
+                        }
+                      >
+                        <option value="center">center</option>
+                        <option value="top">top</option>
+                        <option value="bottom">bottom</option>
+                      </select>
+                    </td>
                     <td className="whitespace-nowrap p-2">
                       <button
                         onClick={saveEdit}
@@ -290,6 +319,7 @@ export function EventsPanel() {
                     <td className="p-2 text-mute">{row.drive_folder_id || "—"}</td>
                     <td className="p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
                     <td className="max-w-[160px] truncate p-2 text-mute">{row.external_url ?? "—"}</td>
+                    <td className="p-2 text-mute">{row.cover_position}</td>
                     <td className="whitespace-nowrap p-2">
                       <button onClick={() => startEdit(row)} className="mr-2 text-cyan hover:underline">
                         EDIT

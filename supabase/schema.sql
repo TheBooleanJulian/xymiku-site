@@ -22,6 +22,10 @@ create table if not exists events (
   -- gallery hosted elsewhere). Ignored once drive_folder_id is set — the
   -- card then always links to that folder's LuxSync gallery instead.
   external_url text,
+  -- Vertical crop bias for the cover photo in its fixed-aspect card box
+  -- (object-position). Landscape covers crop fine at "center"; portrait
+  -- covers often need "top" to keep a face in frame.
+  cover_position text not null default 'center' check (cover_position in ('top', 'center', 'bottom')),
   created_at timestamptz not null default now()
 );
 
@@ -85,3 +89,6 @@ create policy "admin write characters" on characters for all
 -- SQL Editor) if `next build` fails with "column events.external_url does
 -- not exist" — safe to run even if the column is already there.
 alter table events add column if not exists external_url text;
+alter table events add column if not exists cover_position text not null default 'center';
+alter table events drop constraint if exists events_cover_position_check;
+alter table events add constraint events_cover_position_check check (cover_position in ('top', 'center', 'bottom'));

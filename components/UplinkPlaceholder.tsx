@@ -33,6 +33,12 @@ export function UplinkPlaceholder({
   const isSignal = seed % 5 === 0;
   const hue = isSignal ? 320 + (seed % 20) : 178 + (seed % 40);
   const hasRealImage = /^(https?:\/\/|\/[^/])/.test(image.src);
+  const positionClass =
+    image.objectPosition === "top"
+      ? "object-top"
+      : image.objectPosition === "bottom"
+        ? "object-bottom"
+        : "object-center";
 
   return (
     <div
@@ -53,7 +59,7 @@ export function UplinkPlaceholder({
           src={image.src}
           alt={image.alt}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
+          className={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
         />
       ) : (
         <div className="absolute inset-0 scan-grid opacity-40" />

@@ -7,6 +7,8 @@ export type UplinkImage = {
   character?: string;
   cosplayer?: string;
   category: "cosplay" | "event" | "portrait" | "conceptual";
+  // Crop bias when this image is shown in a fixed-aspect box (object-cover).
+  objectPosition?: "top" | "center" | "bottom";
 };
 
 export type UplinkEvent = {
@@ -16,6 +18,7 @@ export type UplinkEvent = {
   imageCount: number;
   status: "online" | "processing" | "archived";
   cover: string;
+  coverPosition: "top" | "center" | "bottom";
   galleryUrl: string;
 };
 

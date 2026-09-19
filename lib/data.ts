@@ -10,6 +10,7 @@ type EventRow = {
   drive_folder_id: string | null;
   cover_drive_file_id: string | null;
   external_url: string | null;
+  cover_position: UplinkEvent["coverPosition"];
 };
 
 type CuratedImageRow = {
@@ -61,6 +62,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
       imageCount: 0,
       status: row.status,
       cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
+      coverPosition: row.cover_position,
       galleryUrl: row.external_url || "/",
     };
   }
@@ -75,6 +77,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
     imageCount: sorted.length,
     status: row.status,
     cover: coverFileId ? driveThumbUrl(coverFileId) : "",
+    coverPosition: row.cover_position,
     galleryUrl: driveGalleryUrl(row.drive_folder_id),
   };
 }
@@ -82,7 +85,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
 export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
     .order("event_date", { ascending: false })
     .limit(limit);
   if (error) throw error;
@@ -97,7 +100,7 @@ export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
 export async function getAllEvents(): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
     .order("event_date", { ascending: false });
   if (error) throw error;
 
@@ -108,6 +111,7 @@ export async function getAllEvents(): Promise<UplinkEvent[]> {
     imageCount: 0,
     status: row.status,
     cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
+    coverPosition: row.cover_position,
     galleryUrl: row.drive_folder_id ? driveGalleryUrl(row.drive_folder_id) : row.external_url || "/",
   }));
 }

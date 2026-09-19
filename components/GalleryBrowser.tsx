@@ -54,6 +54,7 @@ export function GalleryBrowser({ events }: { events: UplinkEvent[] }) {
                 year: Number(event.date.slice(-4)),
                 category: "event",
                 event: event.name,
+                objectPosition: event.coverPosition,
               }}
               showMeta={false}
               className="aspect-[4/3]"
