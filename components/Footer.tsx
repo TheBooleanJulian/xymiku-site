@@ -13,7 +13,7 @@ export function Footer() {
             XYMIKU39 <span className="text-cyan">{"//"}</span> VISUAL ARCHIVE
           </p>
           <p className="font-technical text-xs tracking-[0.2em] text-mute">
-            MOMENTOUS IMAGES KEPT UNFORGETTABLE
+            MIKU IMAGES KAWAII UPLINK
           </p>
         </div>
 

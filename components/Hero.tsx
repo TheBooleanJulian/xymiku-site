@@ -16,7 +16,7 @@ const heroImage: ArchiveImage = {
   character: "Hatsune Miku",
 };
 
-const MIKU_LINES = ["MOMENTOUS", "IMAGES", "KEPT", "UNFORGETTABLE"];
+const MIKU_LINES = ["MIKU", "IMAGES", "KAWAII", "UPLINK"];
 
 function CaptureModulePanel() {
   return (
