@@ -9,6 +9,7 @@ import { Portfolio } from "@/components/Portfolio";
 import { VisualSynthesis } from "@/components/VisualSynthesis";
 import { SectionDivider } from "@/components/SectionDivider";
 import { MikuSignature } from "@/components/MikuSignature";
+import { InstagramFeed } from "@/components/InstagramFeed";
 import { SignalDivider } from "@/components/SignalDivider";
 import { Footer } from "@/components/Footer";
 import {
@@ -46,6 +47,7 @@ export default async function Home() {
           subtext="FIVE YEARS OF SIGNAL, ORGANIZED BY XYMIKU.39"
         />
         <MikuSignature />
+        <InstagramFeed />
       </main>
       <SignalDivider />
       <Footer />

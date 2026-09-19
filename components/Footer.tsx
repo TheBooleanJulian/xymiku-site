@@ -1,5 +1,5 @@
 const SOCIALS = [
-  { label: "INSTAGRAM", href: "#" },
+  { label: "INSTAGRAM", href: "https://www.instagram.com/xymiku.39/" },
   { label: "TWITTER / X", href: "#" },
   { label: "EMAIL", href: "#" },
 ];
