@@ -175,12 +175,14 @@ export function RadarPulse({ accent = "cyan" }: { accent?: "cyan" | "signal" }) 
   const gridStroke =
     accent === "signal" ? "rgba(255, 63, 164, 0.15)" : "rgba(57, 230, 242, 0.15)";
 
-  const polyStates = [
-    "50,15 75,40 65,75 35,75 25,40",
-    "50,22 68,38 58,68 42,68 32,38",
-    "50,15 75,40 65,75 35,75 25,40",
-  ];
+  const fill = accent === "signal" ? "rgba(255, 63, 164, 0.12)" : "rgba(57, 230, 242, 0.12)";
+  const glowStyle = { filter: `drop-shadow(0 0 4px ${stroke})` };
+  const polyA = "50,15 75,40 65,75 35,75 25,40";
+  const polyB = "50,22 68,38 58,68 42,68 32,38";
 
+  // Framer Motion can't reliably morph a raw SVG `points`/`d` string (see
+  // Waveform above), so crossfade two static polygons via opacity instead.
+  // `scale`/`opacity` are plain CSS transforms and interpolate fine.
   return (
     <svg viewBox="0 0 100 100" className="h-full w-full">
       <circle cx="50" cy="50" r="40" fill="none" stroke={gridStroke} strokeWidth="0.5" />
@@ -189,24 +191,37 @@ export function RadarPulse({ accent = "cyan" }: { accent?: "cyan" | "signal" }) 
       <line x1="50" y1="10" x2="50" y2="90" stroke={gridStroke} strokeWidth="0.5" />
       <line x1="10" y1="50" x2="90" y2="50" stroke={gridStroke} strokeWidth="0.5" />
       <motion.polygon
-        points={polyStates[0]}
-        fill={accent === "signal" ? "rgba(255, 63, 164, 0.12)" : "rgba(57, 230, 242, 0.12)"}
+        points={polyA}
+        fill={fill}
         stroke={stroke}
         strokeWidth="1.5"
-        style={{ filter: `drop-shadow(0 0 4px ${stroke})` }}
-        animate={prefersReducedMotion ? undefined : { points: polyStates }}
+        style={glowStyle}
+        initial={false}
+        animate={prefersReducedMotion ? { opacity: 1 } : { opacity: [1, 0, 1] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
+      {!prefersReducedMotion && (
+        <motion.polygon
+          points={polyB}
+          fill={fill}
+          stroke={stroke}
+          strokeWidth="1.5"
+          style={glowStyle}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
       <motion.circle
         cx="50"
         cy="50"
-        r="2"
+        r={2}
         fill={stroke}
-        style={{ filter: `drop-shadow(0 0 4px ${stroke})` }}
+        style={glowStyle}
         animate={
           prefersReducedMotion
             ? undefined
-            : { r: [2, 4, 2], opacity: [1, 0.5, 1] }
+            : { scale: [1, 2, 1], opacity: [1, 0.5, 1] }
         }
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       />
