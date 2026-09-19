@@ -12,6 +12,12 @@ function hashSeed(id: string): number {
   return h;
 }
 
+// The root div below hardcodes `relative`. Passing a `className` that also
+// sets position (e.g. "absolute inset-0") won't override it — Tailwind's
+// cascade order, not prop order, decides which wins, and `relative` wins
+// here — leaving the div height-0 and its image invisible. Wrap this
+// component in your own positioned div instead of trying to reposition it
+// via className (see Hero.tsx for the pattern).
 export function UplinkPlaceholder({
   image,
   showMeta = true,
@@ -26,7 +32,7 @@ export function UplinkPlaceholder({
   // split across the archive roughly in line with the site's accent ratio.
   const isSignal = seed % 5 === 0;
   const hue = isSignal ? 320 + (seed % 20) : 178 + (seed % 40);
-  const hasRealImage = /^https?:\/\//.test(image.src);
+  const hasRealImage = /^(https?:\/\/|\/[^/])/.test(image.src);
 
   return (
     <div

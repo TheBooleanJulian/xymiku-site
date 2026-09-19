@@ -9,11 +9,10 @@ import type { UplinkImage } from "@/lib/types";
 
 const heroImage: UplinkImage = {
   id: "hero-main",
-  src: "/mock/hero-main",
-  alt: "Hatsune Miku cosplay photography, Xymiku.39 uplink",
+  src: "/hero.jpg",
+  alt: "Group photo of cosplayers and fans at a Hatsune Miku Expo event, Xymiku.39 uplink",
   year: 2026,
-  category: "cosplay",
-  character: "Hatsune Miku",
+  category: "event",
 };
 
 const MIKU_LINES = ["MIKU", "IMAGES", "KAWAII", "UPLINK"];
@@ -184,11 +183,9 @@ export function Hero() {
         <BootSequence onDone={() => setBooting(false)} />
       )}
 
-      <UplinkPlaceholder
-        image={heroImage}
-        showMeta={false}
-        className="absolute inset-0"
-      />
+      <div className="absolute inset-0">
+        <UplinkPlaceholder image={heroImage} showMeta={false} className="h-full w-full" />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
       <div className="absolute inset-0 scanline" />
 
