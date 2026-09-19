@@ -16,6 +16,7 @@ export type UplinkEvent = {
   imageCount: number;
   status: "online" | "processing" | "archived";
   cover: string;
+  galleryUrl: string;
 };
 
 export type CharacterCategory = {

@@ -47,7 +47,9 @@ export function PhotoDelivery({ events: recentEvents }: { events: UplinkEvent[] 
           {recentEvents.map((event) => (
             <a
               key={event.id}
-              href={`/events/${event.id}`}
+              href={event.galleryUrl}
+              target="_blank"
+              rel="noopener"
               className="group border border-cyan/15 bg-deep/40 transition-colors hover:border-cyan/50"
             >
               <UplinkPlaceholder

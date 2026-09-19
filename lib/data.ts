@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import { listDriveFolder, driveThumbUrl, driveFullUrl } from "./luxsync";
+import { listDriveFolder, driveThumbUrl, driveFullUrl, driveGalleryUrl } from "./luxsync";
 import type { UplinkEvent, UplinkImage, CharacterCategory } from "./types";
 
 type EventRow = {
@@ -60,6 +60,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
     imageCount: sorted.length,
     status: row.status,
     cover: coverFileId ? driveThumbUrl(coverFileId) : "",
+    galleryUrl: driveGalleryUrl(row.drive_folder_id),
   };
 }
 
@@ -71,48 +72,6 @@ export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
     .limit(limit);
   if (error) throw error;
   return Promise.all(((data ?? []) as EventRow[]).map(eventToUplinkEvent));
-}
-
-export async function getAllEventIds(): Promise<string[]> {
-  const { data, error } = await supabase.from("events").select("id");
-  if (error) throw error;
-  return (data ?? []).map((e) => e.id as string);
-}
-
-export async function getEvent(eventId: string): Promise<UplinkEvent | null> {
-  const { data, error } = await supabase
-    .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
-    .eq("id", eventId)
-    .maybeSingle();
-  if (error) throw error;
-  if (!data) return null;
-  return eventToUplinkEvent(data as EventRow);
-}
-
-export async function getEventImages(eventId: string): Promise<UplinkImage[]> {
-  const { data, error } = await supabase
-    .from("events")
-    .select("id,name,event_date,drive_folder_id")
-    .eq("id", eventId)
-    .maybeSingle();
-  if (error) throw error;
-  if (!data) return [];
-
-  const { name, event_date, drive_folder_id } = data as Pick<EventRow, "name" | "event_date" | "drive_folder_id">;
-  const { files } = await listDriveFolder(drive_folder_id);
-  const year = new Date(`${event_date}T00:00:00Z`).getUTCFullYear();
-
-  return [...files]
-    .sort((a, b) => a.createdTime.localeCompare(b.createdTime))
-    .map((file) => ({
-      id: file.id,
-      src: driveFullUrl(file.id),
-      alt: `${name} photography`,
-      year,
-      category: "event" as const,
-      event: name,
-    }));
 }
 
 export async function getTimelineImages(): Promise<UplinkImage[]> {

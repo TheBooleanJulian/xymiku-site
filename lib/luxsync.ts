@@ -31,3 +31,10 @@ export function driveThumbUrl(fileId: string): string {
 export function driveFullUrl(fileId: string): string {
   return `${LUXSYNC_URL}/api/full/drive/${fileId}`;
 }
+
+// LuxSync's own gallery page for a Drive folder — has lightbox, multi-select,
+// and zip/single-file download built in, so event cards link straight here
+// instead of a custom subpage.
+export function driveGalleryUrl(folderId: string, sort = "date-asc"): string {
+  return `${LUXSYNC_URL}/?provider=drive&source=${folderId}&sort=${sort}`;
+}
