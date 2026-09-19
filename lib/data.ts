@@ -8,6 +8,7 @@ type EventRow = {
   event_date: string;
   status: UplinkEvent["status"];
   drive_folder_id: string;
+  cover_drive_file_id: string | null;
 };
 
 type CuratedImageRow = {
@@ -51,20 +52,21 @@ function mapCuratedRow(row: CuratedImageRow): UplinkImage {
 async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
   const { files } = await listDriveFolder(row.drive_folder_id);
   const sorted = [...files].sort((a, b) => a.createdTime.localeCompare(b.createdTime));
+  const coverFileId = row.cover_drive_file_id ?? sorted[0]?.id;
   return {
     id: row.id,
     name: row.name,
     date: formatDate(row.event_date),
     imageCount: sorted.length,
     status: row.status,
-    cover: sorted[0] ? driveThumbUrl(sorted[0].id) : "",
+    cover: coverFileId ? driveThumbUrl(coverFileId) : "",
   };
 }
 
 export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
     .order("event_date", { ascending: false })
     .limit(limit);
   if (error) throw error;
@@ -80,7 +82,7 @@ export async function getAllEventIds(): Promise<string[]> {
 export async function getEvent(eventId: string): Promise<UplinkEvent | null> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
     .eq("id", eventId)
     .maybeSingle();
   if (error) throw error;

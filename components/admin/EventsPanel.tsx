@@ -1,0 +1,288 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
+type EventRow = {
+  id: string;
+  name: string;
+  event_date: string;
+  status: "online" | "processing" | "archived";
+  drive_folder_id: string;
+  cover_drive_file_id: string | null;
+};
+
+const BLANK: EventRow = {
+  id: "",
+  name: "",
+  event_date: "",
+  status: "online",
+  drive_folder_id: "",
+  cover_drive_file_id: "",
+};
+
+const input =
+  "w-full border border-cyan/30 bg-black px-2 py-1.5 font-technical text-xs text-ink focus:border-cyan focus:outline-none";
+
+export function EventsPanel() {
+  const [rows, setRows] = useState<EventRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [draft, setDraft] = useState<EventRow>(BLANK);
+  const [creating, setCreating] = useState<EventRow>(BLANK);
+  const [saving, setSaving] = useState(false);
+
+  async function load() {
+    const { data, error } = await supabase
+      .from("events")
+      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
+      .order("event_date", { ascending: false });
+    if (error) setError(error.message);
+    else setRows(data as EventRow[]);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from("events")
+        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id")
+        .order("event_date", { ascending: false });
+      if (error) setError(error.message);
+      else setRows(data as EventRow[]);
+      setLoading(false);
+    })();
+  }, []);
+
+  function startEdit(row: EventRow) {
+    setEditingId(row.id);
+    setDraft({ ...row, cover_drive_file_id: row.cover_drive_file_id ?? "" });
+  }
+
+  async function saveEdit() {
+    setSaving(true);
+    setError(null);
+    const { error } = await supabase
+      .from("events")
+      .update({
+        name: draft.name,
+        event_date: draft.event_date,
+        status: draft.status,
+        drive_folder_id: draft.drive_folder_id,
+        cover_drive_file_id: draft.cover_drive_file_id || null,
+      })
+      .eq("id", editingId);
+    setSaving(false);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setEditingId(null);
+    load();
+  }
+
+  async function remove(id: string) {
+    if (!window.confirm(`Delete event "${id}"? This cannot be undone.`)) return;
+    setError(null);
+    const { error } = await supabase.from("events").delete().eq("id", id);
+    if (error) setError(error.message);
+    else load();
+  }
+
+  async function createEvent(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+    const { error } = await supabase.from("events").insert({
+      id: creating.id,
+      name: creating.name,
+      event_date: creating.event_date,
+      status: creating.status,
+      drive_folder_id: creating.drive_folder_id,
+      cover_drive_file_id: creating.cover_drive_file_id || null,
+    });
+    setSaving(false);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setCreating(BLANK);
+    load();
+  }
+
+  return (
+    <div>
+      {error && (
+        <p className="mb-4 border border-signal/40 bg-signal/10 px-3 py-2 font-technical text-xs text-signal">
+          {error}
+        </p>
+      )}
+
+      <form
+        onSubmit={createEvent}
+        className="mb-6 grid grid-cols-2 gap-2 border border-cyan/15 bg-deep/40 p-4 sm:grid-cols-3"
+      >
+        <p className="col-span-2 font-technical text-[10px] tracking-[0.15em] text-cyan sm:col-span-3">
+          ADD EVENT
+        </p>
+        <input
+          className={input}
+          placeholder="id (slug)"
+          required
+          value={creating.id}
+          onChange={(e) => setCreating({ ...creating, id: e.target.value })}
+        />
+        <input
+          className={input}
+          placeholder="name"
+          required
+          value={creating.name}
+          onChange={(e) => setCreating({ ...creating, name: e.target.value })}
+        />
+        <input
+          className={input}
+          type="date"
+          required
+          value={creating.event_date}
+          onChange={(e) => setCreating({ ...creating, event_date: e.target.value })}
+        />
+        <select
+          className={input}
+          value={creating.status}
+          onChange={(e) =>
+            setCreating({ ...creating, status: e.target.value as EventRow["status"] })
+          }
+        >
+          <option value="online">online</option>
+          <option value="processing">processing</option>
+          <option value="archived">archived</option>
+        </select>
+        <input
+          className={input}
+          placeholder="drive_folder_id"
+          required
+          value={creating.drive_folder_id}
+          onChange={(e) => setCreating({ ...creating, drive_folder_id: e.target.value })}
+        />
+        <input
+          className={input}
+          placeholder="cover_drive_file_id (optional)"
+          value={creating.cover_drive_file_id ?? ""}
+          onChange={(e) => setCreating({ ...creating, cover_drive_file_id: e.target.value })}
+        />
+        <button
+          type="submit"
+          disabled={saving}
+          className="col-span-2 border border-cyan bg-cyan px-4 py-1.5 font-display text-xs font-bold tracking-[0.1em] text-black disabled:opacity-50 sm:col-span-3"
+        >
+          {saving ? "SAVING..." : "ADD"}
+        </button>
+      </form>
+
+      {loading ? (
+        <p className="font-technical text-xs text-mute">LOADING...</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse font-technical text-xs">
+            <thead>
+              <tr className="border-b border-cyan/15 text-left text-mute">
+                <th className="p-2">ID</th>
+                <th className="p-2">Name</th>
+                <th className="p-2">Date</th>
+                <th className="p-2">Status</th>
+                <th className="p-2">Drive folder</th>
+                <th className="p-2">Cover file</th>
+                <th className="p-2" />
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) =>
+                editingId === row.id ? (
+                  <tr key={row.id} className="border-b border-cyan/10">
+                    <td className="p-2 text-mute">{row.id}</td>
+                    <td className="p-2">
+                      <input
+                        className={input}
+                        value={draft.name}
+                        onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        className={input}
+                        type="date"
+                        value={draft.event_date}
+                        onChange={(e) => setDraft({ ...draft, event_date: e.target.value })}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <select
+                        className={input}
+                        value={draft.status}
+                        onChange={(e) =>
+                          setDraft({ ...draft, status: e.target.value as EventRow["status"] })
+                        }
+                      >
+                        <option value="online">online</option>
+                        <option value="processing">processing</option>
+                        <option value="archived">archived</option>
+                      </select>
+                    </td>
+                    <td className="p-2">
+                      <input
+                        className={input}
+                        value={draft.drive_folder_id}
+                        onChange={(e) =>
+                          setDraft({ ...draft, drive_folder_id: e.target.value })
+                        }
+                      />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        className={input}
+                        value={draft.cover_drive_file_id ?? ""}
+                        onChange={(e) =>
+                          setDraft({ ...draft, cover_drive_file_id: e.target.value })
+                        }
+                      />
+                    </td>
+                    <td className="whitespace-nowrap p-2">
+                      <button
+                        onClick={saveEdit}
+                        disabled={saving}
+                        className="mr-2 text-cyan hover:underline"
+                      >
+                        SAVE
+                      </button>
+                      <button onClick={() => setEditingId(null)} className="text-mute hover:underline">
+                        CANCEL
+                      </button>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={row.id} className="border-b border-cyan/10">
+                    <td className="p-2 text-mute">{row.id}</td>
+                    <td className="p-2 text-ink">{row.name}</td>
+                    <td className="p-2 text-mute">{row.event_date}</td>
+                    <td className="p-2 text-mute">{row.status}</td>
+                    <td className="p-2 text-mute">{row.drive_folder_id}</td>
+                    <td className="p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
+                    <td className="whitespace-nowrap p-2">
+                      <button onClick={() => startEdit(row)} className="mr-2 text-cyan hover:underline">
+                        EDIT
+                      </button>
+                      <button onClick={() => remove(row.id)} className="text-signal hover:underline">
+                        DELETE
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
