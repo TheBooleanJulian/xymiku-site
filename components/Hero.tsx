@@ -220,7 +220,6 @@ export function Hero() {
                 className="font-display text-2xl font-bold tracking-wide text-ink sm:text-3xl"
               >
                 {line}
-                {i === 0 && <span className="text-cyan">.</span>}
               </span>
             ))}
           </div>
