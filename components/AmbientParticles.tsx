@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 type Particle = {
@@ -24,9 +24,13 @@ function makeParticles(count: number): Particle[] {
 /** Slow rising cyan/signal motes drifting up the page, styled after MIKU-19's bg-particles field. */
 export function AmbientParticles() {
   const prefersReducedMotion = useReducedMotion();
-  const particles = useMemo(() => makeParticles(50), []);
+  const [particles, setParticles] = useState<Particle[] | null>(null);
 
-  if (prefersReducedMotion) return null;
+  useEffect(() => {
+    setParticles(makeParticles(50));
+  }, []);
+
+  if (prefersReducedMotion || !particles) return null;
 
   return (
     <div

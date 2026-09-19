@@ -3,21 +3,18 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-const WAVE_FRAMES = [
+const WAVE_FRAMES: [string, string][] = [
   [
     "M0 20 C 10 4, 20 4, 30 20 S 50 36, 60 20 S 80 4, 90 20 S 110 36, 120 20",
     "M0 20 C 10 36, 20 36, 30 20 S 50 4, 60 20 S 80 36, 90 20 S 110 4, 120 20",
-    "M0 20 C 10 4, 20 4, 30 20 S 50 36, 60 20 S 80 4, 90 20 S 110 36, 120 20",
   ],
   [
     "M0 20 L10 6 L20 32 L30 10 L40 28 L50 8 L60 30 L70 12 L80 26 L90 10 L100 24 L110 14 L120 20",
     "M0 20 L10 32 L20 6 L30 28 L40 10 L50 30 L60 8 L70 26 L80 12 L90 24 L100 10 L110 20 L120 20",
-    "M0 20 L10 6 L20 32 L30 10 L40 28 L50 8 L60 30 L70 12 L80 26 L90 10 L100 24 L110 14 L120 20",
   ],
   [
     "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
     "M0 34 C 20 20, 50 34, 55 20 C 60 6, 100 20, 120 6",
-    "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
   ],
 ];
 
@@ -31,24 +28,41 @@ export function Waveform({
   const prefersReducedMotion = useReducedMotion();
   const stroke =
     accent === "signal" ? "var(--color-signal)" : "var(--color-cyan-bright)";
+  const [pathA, pathB] = WAVE_FRAMES[variant];
+  const duration = 2.4 + variant * 0.7;
+  const glowStyle = { filter: `drop-shadow(0 0 5px ${stroke})` };
 
+  // Framer Motion can't reliably morph an SVG path's raw `d` string (it
+  // needs matching numeric-token structure and can interpolate to
+  // "undefined" mid-transition), so two static paths are crossfaded instead.
   return (
     <svg viewBox="0 0 120 40" className="h-10 w-full overflow-visible">
       <motion.path
-        d={WAVE_FRAMES[variant][0]}
+        d={pathA}
         fill="none"
         stroke={stroke}
         strokeWidth="2"
         strokeLinecap="round"
-        opacity={0.95}
-        style={{ filter: `drop-shadow(0 0 5px ${stroke})` }}
-        animate={prefersReducedMotion ? undefined : { d: WAVE_FRAMES[variant] }}
-        transition={{
-          duration: 2.4 + variant * 0.7,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        style={glowStyle}
+        initial={false}
+        animate={
+          prefersReducedMotion ? { opacity: 0.95 } : { opacity: [0.95, 0, 0.95] }
+        }
+        transition={{ duration, repeat: Infinity, ease: "easeInOut" }}
       />
+      {!prefersReducedMotion && (
+        <motion.path
+          d={pathB}
+          fill="none"
+          stroke={stroke}
+          strokeWidth="2"
+          strokeLinecap="round"
+          style={glowStyle}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.95, 0] }}
+          transition={{ duration, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
     </svg>
   );
 }
