@@ -85,7 +85,7 @@ function SignalPanel() {
 
       <div className="flex flex-col gap-2">
         <p className="font-technical text-[9px] tracking-[0.2em] text-mute">
-          CHANNEL 39 // XYMIKU39
+          CHANNEL 39 // XYMIKU.39
         </p>
         <div className="flex h-16 items-end gap-[2px]">
           {Array.from({ length: 40 }).map((_, i) => (
@@ -207,7 +207,7 @@ export function Hero() {
 
         <div className="flex flex-col justify-end px-4 pb-12 pt-8 sm:px-6 sm:pb-20">
           <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-ink text-glow sm:text-7xl lg:text-8xl">
-            XYMIKU<span className="text-cyan">39</span>
+            XYMIKU<span className="text-cyan">.39</span>
           </h1>
           <p className="mt-3 font-technical text-sm tracking-[0.4em] text-cyan">
             VISUAL ARCHIVE

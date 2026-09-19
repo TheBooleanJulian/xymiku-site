@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src=".github/assets/hero-banner.png" alt="XYMIKU39 hero — animated boot sequence with HUD side panels and the MIKU IMAGES KAWAII UPLINK tagline" width="100%" />
+<img src=".github/assets/hero-banner.png" alt="XYMIKU.39 hero — animated boot sequence with HUD side panels and the MIKU IMAGES KAWAII UPLINK tagline" width="100%" />
 
-# XYMIKU39
+# XYMIKU.39
 
 **MIKU IMAGES KAWAII UPLINK (M.I.K.U.)**
 
