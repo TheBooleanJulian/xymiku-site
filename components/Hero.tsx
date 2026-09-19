@@ -244,6 +244,12 @@ export function Hero() {
               >
                 EXPLORE THE UPLINK
               </a>
+              <a
+                href="#instagram"
+                className="flex-1 border border-cyan/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
+              >
+                INSTAGRAM UPLINK
+              </a>
             </div>
           </div>
         </div>

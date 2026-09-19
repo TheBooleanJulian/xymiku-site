@@ -34,6 +34,7 @@ export default async function Home() {
       <Header />
       <main>
         <Hero />
+        <InstagramFeed />
         <SystemDiagnostics />
         <PhotoDelivery events={events} />
         <UplinkTimeline images={timelineImages} />
@@ -47,7 +48,6 @@ export default async function Home() {
           subtext="FIVE YEARS OF SIGNAL, ORGANIZED BY XYMIKU.39"
         />
         <MikuSignature />
-        <InstagramFeed />
       </main>
       <SignalDivider />
       <Footer />
