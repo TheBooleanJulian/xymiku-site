@@ -183,12 +183,6 @@ export function Hero() {
         <BootSequence onDone={() => setBooting(false)} />
       )}
 
-      <div className="absolute inset-0">
-        <UplinkPlaceholder image={heroImage} showMeta={false} className="h-full w-full" />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
-      <div className="absolute inset-0 scanline" />
-
       {/* status strip */}
       <div className="relative z-10 flex flex-wrap items-center gap-x-6 gap-y-2 px-4 pt-24 font-technical text-[10px] tracking-[0.2em] text-cyan/80 sm:px-6">
         <span className="hud-badge">
@@ -202,47 +196,55 @@ export function Hero() {
       <div className="relative z-10 grid flex-1 lg:grid-cols-[240px_1fr_240px]">
         <CaptureModulePanel />
 
-        <div className="flex flex-col justify-end px-4 pb-12 pt-8 sm:px-6 sm:pb-20">
-          <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-ink text-glow sm:text-7xl lg:text-8xl">
-            XYMIKU<span className="text-cyan">.39</span>
-          </h1>
-          <p className="mt-3 font-technical text-sm tracking-[0.4em] text-cyan">
-            VISUAL UPLINK
-          </p>
-
-          <div className="mt-8 flex flex-col gap-1 border-l-2 border-cyan/50 pl-4">
-            {MIKU_LINES.map((line, i) => (
-              <span
-                key={line}
-                className="font-display text-2xl font-bold tracking-wide text-ink sm:text-3xl"
-              >
-                {line}
-              </span>
-            ))}
+        <div className="relative flex flex-col justify-end overflow-hidden px-4 pb-12 pt-8 sm:px-6 sm:pb-20">
+          <div className="absolute inset-0">
+            <UplinkPlaceholder image={heroImage} showMeta={false} className="h-full w-full" />
           </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
+          <div className="absolute inset-0 scanline" />
 
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#photo-delivery"
-              style={{
-                clipPath:
-                  "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
-              }}
-              className="flex-1 bg-gradient-to-r from-cyan to-signal px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
-            >
-              <span className="block font-display text-sm font-bold tracking-[0.15em]">
-                FIND YOUR PHOTOS
-              </span>
-              <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
-                UPLINK ACCESS // READY
-              </span>
-            </a>
-            <a
-              href="#uplink"
-              className="flex-1 border border-cyan/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
-            >
-              EXPLORE THE UPLINK
-            </a>
+          <div className="relative z-10">
+            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-ink text-glow sm:text-7xl lg:text-8xl">
+              XYMIKU<span className="text-cyan">.39</span>
+            </h1>
+            <p className="mt-3 font-technical text-sm tracking-[0.4em] text-cyan">
+              VISUAL UPLINK
+            </p>
+
+            <div className="mt-8 flex flex-col gap-1 border-l-2 border-cyan/50 pl-4">
+              {MIKU_LINES.map((line) => (
+                <span
+                  key={line}
+                  className="font-display text-2xl font-bold tracking-wide text-ink sm:text-3xl"
+                >
+                  {line}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#photo-delivery"
+                style={{
+                  clipPath:
+                    "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
+                }}
+                className="flex-1 bg-gradient-to-r from-cyan to-signal px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
+              >
+                <span className="block font-display text-sm font-bold tracking-[0.15em]">
+                  FIND YOUR PHOTOS
+                </span>
+                <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
+                  UPLINK ACCESS // READY
+                </span>
+              </a>
+              <a
+                href="#uplink"
+                className="flex-1 border border-cyan/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
+              >
+                EXPLORE THE UPLINK
+              </a>
+            </div>
           </div>
         </div>
 
