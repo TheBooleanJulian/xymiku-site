@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 const NAV_ITEMS = [
   { label: "HOME", href: "#" },
   { label: "PHOTO DELIVERY", href: "#photo-delivery" },
-  { label: "MIKU ARCHIVE", href: "#archive" },
+  { label: "MIKU UPLINK", href: "#uplink" },
   { label: "PORTFOLIO", href: "#portfolio" },
   { label: "ABOUT", href: "#footer" },
 ];

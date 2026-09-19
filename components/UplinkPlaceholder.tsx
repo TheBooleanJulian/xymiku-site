@@ -1,6 +1,6 @@
-import type { ArchiveImage } from "@/lib/types";
+import type { UplinkImage } from "@/lib/types";
 
-// Renders the real photo when ArchiveImage.src is a live URL (Supabase
+// Renders the real photo when UplinkImage.src is a live URL (Supabase
 // Storage). Falls back to a deterministic technical gradient card for any
 // image that has no src yet, so there is never a broken image path.
 
@@ -12,12 +12,12 @@ function hashSeed(id: string): number {
   return h;
 }
 
-export function ArchivePlaceholder({
+export function UplinkPlaceholder({
   image,
   showMeta = true,
   className = "",
 }: {
-  image: ArchiveImage;
+  image: UplinkImage;
   showMeta?: boolean;
   className?: string;
 }) {
@@ -65,7 +65,7 @@ export function ArchivePlaceholder({
       {showMeta && (
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/80 to-transparent p-3 font-technical text-[10px] tracking-wider text-cyan/80">
           <span className="truncate">
-            {image.character ?? image.event ?? "ARCHIVE"}
+            {image.character ?? image.event ?? "UPLINK"}
           </span>
           <span className="shrink-0 text-mute">{image.year}</span>
         </div>

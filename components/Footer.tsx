@@ -10,7 +10,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <div className="flex flex-col gap-2">
           <p className="font-display text-lg font-bold tracking-wide text-ink">
-            XYMIKU.39 <span className="text-cyan">{"//"}</span> VISUAL ARCHIVE
+            XYMIKU.39 <span className="text-cyan">{"//"}</span> VISUAL UPLINK
           </p>
           <p className="font-technical text-xs tracking-[0.2em] text-mute">
             MIKU IMAGES KAWAII UPLINK
@@ -18,7 +18,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-technical text-[10px] tracking-[0.2em] text-cyan/80">
-          <span>ARCHIVE NODE 39</span>
+          <span>UPLINK NODE 39</span>
           <span className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan pulse-dot" />
             SYSTEM ONLINE

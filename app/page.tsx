@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { SystemDiagnostics } from "@/components/SystemDiagnostics";
 import { PhotoDelivery } from "@/components/PhotoDelivery";
-import { ArchiveTimeline } from "@/components/ArchiveTimeline";
+import { UplinkTimeline } from "@/components/UplinkTimeline";
 import { CharacterIndex } from "@/components/CharacterIndex";
 import { FeaturedCosplay } from "@/components/FeaturedCosplay";
 import { Portfolio } from "@/components/Portfolio";
@@ -35,13 +35,13 @@ export default async function Home() {
         <Hero />
         <SystemDiagnostics />
         <PhotoDelivery events={events} />
-        <ArchiveTimeline images={timelineImages} />
+        <UplinkTimeline images={timelineImages} />
         <CharacterIndex characters={characters} />
         <FeaturedCosplay images={featuredCosplay} />
         <Portfolio work={portfolioWork} />
         <VisualSynthesis />
         <SectionDivider
-          headline="ARCHIVE SYNTHESIS COMPLETE //"
+          headline="UPLINK SYNTHESIS COMPLETE //"
           highlight="2021—2026"
           subtext="FIVE YEARS OF SIGNAL, ORGANIZED BY XYMIKU.39"
         />

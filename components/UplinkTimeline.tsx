@@ -1,13 +1,13 @@
-import type { ArchiveImage } from "@/lib/types";
-import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import type { UplinkImage } from "@/lib/types";
+import { UplinkPlaceholder } from "./UplinkPlaceholder";
 
-export function ArchiveTimeline({ images: timelineImages }: { images: ArchiveImage[] }) {
+export function UplinkTimeline({ images: timelineImages }: { images: UplinkImage[] }) {
   return (
-    <section id="archive" className="border-b border-cyan/15 py-16">
+    <section id="uplink" className="border-b border-cyan/15 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-wrap items-center gap-3">
           <p className="font-technical text-[11px] tracking-[0.3em] text-cyan">
-            ◆ ARCHIVE 39
+            ◆ UPLINK 39
           </p>
           <span className="hud-badge font-technical text-[9px] tracking-[0.2em]">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan pulse-dot" />
@@ -21,7 +21,7 @@ export function ArchiveTimeline({ images: timelineImages }: { images: ArchiveIma
           A chronological record — 2021 through 2026.
         </p>
         <p className="mt-1 font-technical text-[10px] tracking-[0.2em] text-cyan/50">
-          ARCHIVE SPAN // 2021 {"→"} 2026
+          UPLINK SPAN // 2021 {"→"} 2026
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export function ArchiveTimeline({ images: timelineImages }: { images: ArchiveIma
             <p className="mb-2 font-display text-2xl font-bold text-cyan">
               {image.year}
             </p>
-            <ArchivePlaceholder image={image} className="aspect-[3/4]" />
+            <UplinkPlaceholder image={image} className="aspect-[3/4]" />
           </div>
         ))}
       </div>

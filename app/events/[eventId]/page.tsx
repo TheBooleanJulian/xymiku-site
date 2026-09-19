@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ArchivePlaceholder } from "@/components/ArchivePlaceholder";
+import { UplinkPlaceholder } from "@/components/UplinkPlaceholder";
 import { getAllEventIds, getEvent, getEventImages } from "@/lib/data";
 
 export async function generateStaticParams() {
@@ -47,7 +47,7 @@ export default async function EventGalleryPage({
             <div className="mt-10 columns-2 gap-3 sm:columns-3 lg:columns-4 [&>*]:mb-3">
               {images.map((image) => (
                 <div key={image.id} className="break-inside-avoid">
-                  <ArchivePlaceholder image={image} className="aspect-[3/4]" />
+                  <UplinkPlaceholder image={image} className="aspect-[3/4]" />
                 </div>
               ))}
             </div>

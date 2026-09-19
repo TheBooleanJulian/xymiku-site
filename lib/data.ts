@@ -1,19 +1,19 @@
 import { supabase } from "./supabase";
 import { listDriveFolder, driveThumbUrl, driveFullUrl } from "./luxsync";
-import type { ArchiveEvent, ArchiveImage, CharacterCategory } from "./types";
+import type { UplinkEvent, UplinkImage, CharacterCategory } from "./types";
 
 type EventRow = {
   id: string;
   name: string;
   event_date: string;
-  status: ArchiveEvent["status"];
+  status: UplinkEvent["status"];
   drive_folder_id: string;
 };
 
 type CuratedImageRow = {
   id: string;
   drive_file_id: string;
-  category: ArchiveImage["category"];
+  category: UplinkImage["category"];
   year: number;
   character: string | null;
   cosplayer: string | null;
@@ -35,11 +35,11 @@ function formatDate(isoDate: string): string {
   return `${day} ${month} ${d.getUTCFullYear()}`;
 }
 
-function mapCuratedRow(row: CuratedImageRow): ArchiveImage {
+function mapCuratedRow(row: CuratedImageRow): UplinkImage {
   return {
     id: row.id,
     src: driveFullUrl(row.drive_file_id),
-    alt: `${row.character ?? row.event_label ?? "Archive"} photography, ${row.year}`,
+    alt: `${row.character ?? row.event_label ?? "Uplink"} photography, ${row.year}`,
     year: row.year,
     category: row.category,
     character: row.character ?? undefined,
@@ -48,7 +48,7 @@ function mapCuratedRow(row: CuratedImageRow): ArchiveImage {
   };
 }
 
-async function eventToArchiveEvent(row: EventRow): Promise<ArchiveEvent> {
+async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
   const { files } = await listDriveFolder(row.drive_folder_id);
   const sorted = [...files].sort((a, b) => a.createdTime.localeCompare(b.createdTime));
   return {
@@ -61,14 +61,14 @@ async function eventToArchiveEvent(row: EventRow): Promise<ArchiveEvent> {
   };
 }
 
-export async function getRecentEvents(limit = 6): Promise<ArchiveEvent[]> {
+export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
     .select("id,name,event_date,status,drive_folder_id")
     .order("event_date", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return Promise.all(((data ?? []) as EventRow[]).map(eventToArchiveEvent));
+  return Promise.all(((data ?? []) as EventRow[]).map(eventToUplinkEvent));
 }
 
 export async function getAllEventIds(): Promise<string[]> {
@@ -77,7 +77,7 @@ export async function getAllEventIds(): Promise<string[]> {
   return (data ?? []).map((e) => e.id as string);
 }
 
-export async function getEvent(eventId: string): Promise<ArchiveEvent | null> {
+export async function getEvent(eventId: string): Promise<UplinkEvent | null> {
   const { data, error } = await supabase
     .from("events")
     .select("id,name,event_date,status,drive_folder_id")
@@ -85,10 +85,10 @@ export async function getEvent(eventId: string): Promise<ArchiveEvent | null> {
     .maybeSingle();
   if (error) throw error;
   if (!data) return null;
-  return eventToArchiveEvent(data as EventRow);
+  return eventToUplinkEvent(data as EventRow);
 }
 
-export async function getEventImages(eventId: string): Promise<ArchiveImage[]> {
+export async function getEventImages(eventId: string): Promise<UplinkImage[]> {
   const { data, error } = await supabase
     .from("events")
     .select("id,name,event_date,drive_folder_id")
@@ -113,7 +113,7 @@ export async function getEventImages(eventId: string): Promise<ArchiveImage[]> {
     }));
 }
 
-export async function getTimelineImages(): Promise<ArchiveImage[]> {
+export async function getTimelineImages(): Promise<UplinkImage[]> {
   const { data, error } = await supabase
     .from("curated_images")
     .select("id,drive_file_id,category,year,character,cosplayer,event_label")
@@ -123,7 +123,7 @@ export async function getTimelineImages(): Promise<ArchiveImage[]> {
   return ((data ?? []) as CuratedImageRow[]).map(mapCuratedRow);
 }
 
-export async function getFeaturedCosplay(limit = 6): Promise<ArchiveImage[]> {
+export async function getFeaturedCosplay(limit = 6): Promise<UplinkImage[]> {
   const { data, error } = await supabase
     .from("curated_images")
     .select("id,drive_file_id,category,year,character,cosplayer,event_label")
@@ -135,7 +135,7 @@ export async function getFeaturedCosplay(limit = 6): Promise<ArchiveImage[]> {
 }
 
 export async function getPortfolioWork(): Promise<
-  Record<"COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL", ArchiveImage[]>
+  Record<"COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL", UplinkImage[]>
 > {
   const { data, error } = await supabase
     .from("curated_images")
@@ -144,7 +144,7 @@ export async function getPortfolioWork(): Promise<
     .order("year", { ascending: false });
   if (error) throw error;
 
-  const grouped: Record<"COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL", ArchiveImage[]> = {
+  const grouped: Record<"COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL", UplinkImage[]> = {
     COSPLAY: [],
     EVENT: [],
     PORTRAIT: [],

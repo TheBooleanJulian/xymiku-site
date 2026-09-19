@@ -23,7 +23,7 @@ throughout as the site's signature motif.
 
 ## Screenshots
 
-|                               System diagnostics & photo search                                |                                 Archive timeline & character index                                  |
+|                               System diagnostics & photo search                                |                                 Uplink timeline & character index                                  |
 | :----------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
 | ![Stat grid framed as system diagnostics, plus the find-your-photos search bar](.github/assets/system-diagnostics.png) | ![Horizontal-scroll shoot timeline above a grid of cosplayed characters](.github/assets/timeline-and-characters.png) |
 
@@ -46,7 +46,7 @@ throughout as the site's signature motif.
 ## Features
 
 - **Boot-sequence hero** — an animated diagnostic startup screen gives way to
-  the main hero, flanked by HUD side panels (capture-module dials, archive
+  the main hero, flanked by HUD side panels (capture-module dials, uplink
   signal waveform, live parameter readouts).
 - **System diagnostics strip** — a stat grid (camera body, sensor resolution,
   archive size, years active) framed as machine telemetry rather than a plain
@@ -54,7 +54,7 @@ throughout as the site's signature motif.
 - **Photo delivery search** — a "find your photos" bar for looking up a shoot
   by event / cosplayer / character (UI complete, backend not yet wired — see
   roadmap).
-- **Archive timeline** — a horizontal-scrolling history of past shoots by
+- **Uplink timeline** — a horizontal-scrolling history of past shoots by
   year.
 - **Character index** — a catalogued grid of cosplayed characters with
   per-character shoot counts and codes.
@@ -75,8 +75,8 @@ The homepage (`app/page.tsx`) composes these components in order:
 | `Hero` | Built, mock content | Animated boot sequence, HUD side panels, waveform decorations. |
 | `SystemDiagnostics` | Built, mock content | A stat grid framed as system diagnostics. |
 | `PhotoDelivery` | UI done, not wired up | A "find your photos" search form — currently a no-op (`preventDefault` only, no real search). |
-| `ArchiveTimeline` | Built, mock content | Horizontal-scroll timeline of shoot history. |
-| `ArchivePlaceholder` | **Explicit placeholder** | Renders a generated gradient in place of a real photo — a documented stand-in until the archive is wired to real images. |
+| `UplinkTimeline` | Built, mock content | Horizontal-scroll timeline of shoot history. |
+| `UplinkPlaceholder` | **Explicit placeholder** | Renders a generated gradient in place of a real photo — a documented stand-in until the archive is wired to real images. |
 | `CharacterIndex` | Built, mock content | Grid of cosplayed characters. |
 | `FeaturedCosplay` | Built, mock content | Masonry-style featured-work grid. |
 | `Portfolio` | Built, mock content | Categorized portfolio sections. |
@@ -115,7 +115,7 @@ Open [http://localhost:3000](http://localhost:3000) to see it. Edit
 
 Rough order, subject to change:
 
-- [ ] **Real photography** — replace every `ArchivePlaceholder` gradient
+- [ ] **Real photography** — replace every `UplinkPlaceholder` gradient
       with actual images (via `next/image`) once a source/CDN for the real
       cosplay photos is decided.
 - [ ] **Real content pipeline** — replace `lib/mock-data.ts` with a real

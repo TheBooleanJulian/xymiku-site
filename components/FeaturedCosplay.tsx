@@ -1,7 +1,7 @@
-import type { ArchiveImage } from "@/lib/types";
-import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import type { UplinkImage } from "@/lib/types";
+import { UplinkPlaceholder } from "./UplinkPlaceholder";
 
-export function FeaturedCosplay({ images: featuredCosplay }: { images: ArchiveImage[] }) {
+export function FeaturedCosplay({ images: featuredCosplay }: { images: UplinkImage[] }) {
   return (
     <section className="border-b border-cyan/15 px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-7xl">
@@ -15,7 +15,7 @@ export function FeaturedCosplay({ images: featuredCosplay }: { images: ArchiveIm
         <div className="mt-10 columns-2 gap-3 sm:columns-3 lg:columns-3 [&>*]:mb-3">
           {featuredCosplay.map((image, i) => (
             <div key={image.id} className="break-inside-avoid">
-              <ArchivePlaceholder
+              <UplinkPlaceholder
                 image={image}
                 className={i % 3 === 0 ? "aspect-[3/4]" : "aspect-square"}
               />

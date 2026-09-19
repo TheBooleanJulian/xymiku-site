@@ -7,7 +7,7 @@ import type { DiagnosticStat } from "./types";
 export const diagnostics: DiagnosticStat[] = [
   { label: "CAMERA", value: "D850" },
   { label: "SENSOR", value: "45.6 MP" },
-  { label: "ARCHIVE", value: "12,847 IMAGES" },
+  { label: "UPLINK", value: "12,847 IMAGES" },
   { label: "EVENTS", value: "083" },
   { label: "YEARS", value: "2021—2026" },
   { label: "SIGNAL", value: "39" },

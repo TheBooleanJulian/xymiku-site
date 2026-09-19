@@ -1,5 +1,5 @@
 import type { CharacterCategory } from "@/lib/types";
-import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import { UplinkPlaceholder } from "./UplinkPlaceholder";
 
 export function CharacterIndex({ characters: characterIndex }: { characters: CharacterCategory[] }) {
   return (
@@ -19,7 +19,7 @@ export function CharacterIndex({ characters: characterIndex }: { characters: Cha
               href={c.href}
               className="group relative overflow-hidden border border-cyan/15 hover:border-cyan/50"
             >
-              <ArchivePlaceholder
+              <UplinkPlaceholder
                 image={{
                   id: c.id,
                   src: c.cover,

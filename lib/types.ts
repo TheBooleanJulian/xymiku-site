@@ -1,4 +1,4 @@
-export type ArchiveImage = {
+export type UplinkImage = {
   id: string;
   src: string;
   alt: string;
@@ -9,7 +9,7 @@ export type ArchiveImage = {
   category: "cosplay" | "event" | "portrait" | "conceptual";
 };
 
-export type ArchiveEvent = {
+export type UplinkEvent = {
   id: string;
   name: string;
   date: string;
@@ -34,5 +34,5 @@ export type DiagnosticStat = {
 
 export type TimelineEntry = {
   year: number;
-  images: ArchiveImage[];
+  images: UplinkImage[];
 };

@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import { UplinkPlaceholder } from "./UplinkPlaceholder";
 import { Bar, Knob, Waveform } from "./SignalWidgets";
 import { visualSignal, captureMeta } from "@/lib/mock-data";
-import type { ArchiveImage } from "@/lib/types";
+import type { UplinkImage } from "@/lib/types";
 
-const heroImage: ArchiveImage = {
+const heroImage: UplinkImage = {
   id: "hero-main",
   src: "/mock/hero-main",
-  alt: "Hatsune Miku cosplay photography, Xymiku.39 archive",
+  alt: "Hatsune Miku cosplay photography, Xymiku.39 uplink",
   year: 2026,
   category: "cosplay",
   character: "Hatsune Miku",
@@ -78,7 +78,7 @@ function SignalPanel() {
     <div className="hud-corners hidden h-full flex-col gap-6 border-l border-cyan/15 bg-black/85 px-4 py-6 backdrop-blur-sm lg:flex">
       <div className="flex items-center justify-between">
         <p className="font-technical text-[10px] tracking-[0.3em] text-cyan">
-          ◆ ARCHIVE SIGNAL
+          ◆ UPLINK SIGNAL
         </p>
         <span className="h-1.5 w-1.5 rounded-full bg-cyan pulse-dot" />
       </div>
@@ -122,7 +122,7 @@ function SignalPanel() {
         </div>
         <div className="w-24">
           <p className="mb-1 font-technical text-[8px] tracking-[0.15em] text-mute">
-            ARCHIVE SYNC
+            UPLINK SYNC
           </p>
           <div className="segment-meter h-2 w-full">
             {Array.from({ length: 10 }).map((_, i) => (
@@ -157,7 +157,7 @@ function BootSequence({ onDone }: { onDone: () => void }) {
       className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-black"
     >
       <p className="font-technical text-xs tracking-[0.3em] text-cyan">
-        {stage < 2 ? "INITIALIZING ARCHIVE..." : "ARCHIVE ONLINE"}
+        {stage < 2 ? "INITIALIZING UPLINK..." : "UPLINK ONLINE"}
       </p>
       <div className="h-px w-48 overflow-hidden bg-cyan/15">
         <motion.div
@@ -184,7 +184,7 @@ export function Hero() {
         <BootSequence onDone={() => setBooting(false)} />
       )}
 
-      <ArchivePlaceholder
+      <UplinkPlaceholder
         image={heroImage}
         showMeta={false}
         className="absolute inset-0"
@@ -198,7 +198,7 @@ export function Hero() {
           <span className="h-1.5 w-1.5 rounded-full bg-cyan pulse-dot" />
           SYSTEM STATUS: ONLINE
         </span>
-        <span>ARCHIVE NODE: 39</span>
+        <span>UPLINK NODE: 39</span>
         <span>PHOTOGRAPHY SYSTEM: ACTIVE</span>
       </div>
 
@@ -210,7 +210,7 @@ export function Hero() {
             XYMIKU<span className="text-cyan">.39</span>
           </h1>
           <p className="mt-3 font-technical text-sm tracking-[0.4em] text-cyan">
-            VISUAL ARCHIVE
+            VISUAL UPLINK
           </p>
 
           <div className="mt-8 flex flex-col gap-1 border-l-2 border-cyan/50 pl-4">
@@ -237,14 +237,14 @@ export function Hero() {
                 FIND YOUR PHOTOS
               </span>
               <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
-                ARCHIVE ACCESS // READY
+                UPLINK ACCESS // READY
               </span>
             </a>
             <a
-              href="#archive"
+              href="#uplink"
               className="flex-1 border border-cyan/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
             >
-              EXPLORE THE ARCHIVE
+              EXPLORE THE UPLINK
             </a>
           </div>
         </div>

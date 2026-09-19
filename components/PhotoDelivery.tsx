@@ -1,15 +1,15 @@
 "use client";
 
-import type { ArchiveEvent } from "@/lib/types";
-import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import type { UplinkEvent } from "@/lib/types";
+import { UplinkPlaceholder } from "./UplinkPlaceholder";
 
 const STATUS_LABEL: Record<string, string> = {
-  online: "ARCHIVE ONLINE",
+  online: "UPLINK ONLINE",
   processing: "⚠ NOT YET INDEXED",
   archived: "ARCHIVED",
 };
 
-export function PhotoDelivery({ events: recentEvents }: { events: ArchiveEvent[] }) {
+export function PhotoDelivery({ events: recentEvents }: { events: UplinkEvent[] }) {
   return (
     <section
       id="photo-delivery"
@@ -39,7 +39,7 @@ export function PhotoDelivery({ events: recentEvents }: { events: ArchiveEvent[]
             type="submit"
             className="border border-cyan bg-cyan px-6 py-4 font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02]"
           >
-            SEARCH ARCHIVE
+            SEARCH UPLINK
           </button>
         </form>
 
@@ -50,7 +50,7 @@ export function PhotoDelivery({ events: recentEvents }: { events: ArchiveEvent[]
               href={`/events/${event.id}`}
               className="group border border-cyan/15 bg-deep/40 transition-colors hover:border-cyan/50"
             >
-              <ArchivePlaceholder
+              <UplinkPlaceholder
                 image={{
                   id: event.id,
                   src: event.cover,

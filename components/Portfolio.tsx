@@ -1,12 +1,12 @@
-import type { ArchiveImage } from "@/lib/types";
-import { ArchivePlaceholder } from "./ArchivePlaceholder";
+import type { UplinkImage } from "@/lib/types";
+import { UplinkPlaceholder } from "./UplinkPlaceholder";
 
 type PortfolioCategory = "COSPLAY" | "EVENT" | "PORTRAIT" | "CONCEPTUAL";
 
 export function Portfolio({
   work: portfolioWork,
 }: {
-  work: Record<PortfolioCategory, ArchiveImage[]>;
+  work: Record<PortfolioCategory, UplinkImage[]>;
 }) {
   return (
     <section id="portfolio" className="border-b border-cyan/15 px-4 py-16 sm:px-6">
@@ -27,7 +27,7 @@ export function Portfolio({
                 </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {portfolioWork[category].map((image) => (
-                    <ArchivePlaceholder
+                    <UplinkPlaceholder
                       key={image.id}
                       image={image}
                       className="aspect-[16/10]"
