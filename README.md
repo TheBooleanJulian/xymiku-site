@@ -23,9 +23,7 @@ throughout as the site's signature motif.
 
 ## Screenshots
 
-|                               System diagnostics & photo search                                |                                 Uplink timeline & character index                                  |
-| :----------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
-| ![Stat grid framed as system diagnostics, plus the find-your-photos search bar](.github/assets/system-diagnostics.png) | ![Horizontal-scroll shoot timeline above a grid of cosplayed characters](.github/assets/timeline-and-characters.png) |
+![Horizontal-scroll shoot timeline above a grid of cosplayed characters](.github/assets/timeline-and-characters.png)
 
 > Every panel above is real UI, rendered live — but every *image* in it (thumbnails,
 > character cards) is currently a generated CSS gradient standing in for a real
@@ -47,10 +45,10 @@ throughout as the site's signature motif.
 
 - **Boot-sequence hero** — an animated diagnostic startup screen gives way to
   the main hero, flanked by HUD side panels (capture-module dials, uplink
-  signal waveform, live parameter readouts).
-- **System diagnostics strip** — a stat grid (camera body, sensor resolution,
-  archive size, years active) framed as machine telemetry rather than a plain
-  "about" blurb.
+  signal waveform, live parameter readouts), with CTAs to the photo search,
+  the timeline, and the Instagram feed.
+- **Instagram feed** — an embedded RSS.app wall widget for @xymiku.39, sat
+  between the hero and the photo search.
 - **Photo delivery search** — a "find your photos" bar for looking up a shoot
   by event / cosplayer / character (UI complete, backend not yet wired — see
   roadmap).
@@ -58,8 +56,7 @@ throughout as the site's signature motif.
   year.
 - **Character index** — a catalogued grid of cosplayed characters with
   per-character shoot counts and codes.
-- **Featured cosplay & portfolio** — masonry-style featured-work grid plus
-  categorized portfolio sections.
+- **Featured cosplay** — masonry-style featured-work grid.
 - **Sticky HUD navigation** — animated mobile hamburger menu, in-page anchor
   links to every section.
 - **Fully responsive HUD chrome** — scanlines, corner brackets, and waveform
@@ -72,22 +69,19 @@ The homepage (`app/page.tsx`) composes these components in order:
 | Component | Status | Description |
 |---|---|---|
 | `Header` | Done | Sticky nav with an animated mobile hamburger menu; links to real in-page anchors. |
-| `Hero` | Built, mock content | Animated boot sequence, HUD side panels, waveform decorations. |
-| `SystemDiagnostics` | Built, mock content | A stat grid framed as system diagnostics. |
+| `Hero` | Built, mock content | Animated boot sequence, HUD side panels, waveform decorations, three CTAs (photo search, uplink timeline, Instagram). |
+| `InstagramFeed` | Done | Embeds the RSS.app wall widget for @xymiku.39. |
 | `PhotoDelivery` | UI done, not wired up | A "find your photos" search form — currently a no-op (`preventDefault` only, no real search). |
 | `UplinkTimeline` | Built, mock content | Horizontal-scroll timeline of shoot history. |
 | `UplinkPlaceholder` | **Explicit placeholder** | Renders a generated gradient in place of a real photo — a documented stand-in until the archive is wired to real images. |
 | `CharacterIndex` | Built, mock content | Grid of cosplayed characters. |
 | `FeaturedCosplay` | Built, mock content | Masonry-style featured-work grid. |
-| `Portfolio` | Built, mock content | Categorized portfolio sections. |
-| `VisualSynthesis` | Built, mock content | Two-column HUD key/value panel, mostly decorative flavor text. |
-| `MikuSignature` | Done | Stylized brand/signature panel — purely decorative, no data dependency. |
-| `Footer` | UI done, not wired up | Social links (Instagram, Twitter/X, Email) currently point to `href="#"`. |
+| `Footer` | Done | Social links: Instagram and Email (`mailto:xymiku.39@xymiku39.com`) point to real destinations. |
 
 **Every image on the site is currently a generated CSS gradient, not a real
-photo** — all content (timeline entries, character list, featured work,
-portfolio pieces, diagnostics stats) is sourced from a single static file,
-`lib/mock-data.ts`, which is explicitly commented as mock/placeholder data.
+photo** — all content (timeline entries, character list, featured work) is
+sourced from a single static file, `lib/mock-data.ts`, which is explicitly
+commented as mock/placeholder data.
 
 ## Getting Started
 
@@ -120,18 +114,12 @@ Rough order, subject to change:
       cosplay photos is decided.
 - [ ] **Real content pipeline** — replace `lib/mock-data.ts` with a real
       data source (CMS, MDX/JSON content files, or a small backend) for
-      timeline entries, characters, featured work, and portfolio pieces.
+      timeline entries, characters, and featured work.
 - [ ] **Working photo search** — implement the `PhotoDelivery` search form
       (currently `preventDefault`-only) against whatever the real photo
       index/backend ends up being.
-- [ ] **Live footer links** — point the Instagram/Twitter/Email links at
-      real destinations.
-- [ ] **Real diagnostics data** (optional/flavor) — decide whether
-      `SystemDiagnostics`' stats stay purely decorative or reflect something
-      real (shoot count, years active, etc.) pulled from the same content
-      source as the rest of the site.
 - [ ] **SEO & metadata** — Open Graph/Twitter card images, page titles,
-      structured data for the portfolio.
+      structured data.
 - [ ] **Accessibility pass** — keyboard nav through the animated menu and
       timeline, alt text once real images exist, motion-reduce handling for
       the boot-sequence/scroll animations.
@@ -150,6 +138,12 @@ changes are recorded below; dates reflect the corresponding commit.
 
 - HUD side panels added to the hero, evolving the cockpit aesthetic
   (capture-module dials, archive signal waveform, live parameter readouts).
+- Added `InstagramFeed` (RSS.app wall widget for @xymiku.39) between the
+  hero and the photo search, plus a third hero CTA linking to it.
+- Removed `SystemDiagnostics`, `Portfolio`, `VisualSynthesis`, and
+  `MikuSignature` — trimmed the homepage down to the sections above.
+- Footer: dropped the Twitter/X button; Instagram and Email now link to
+  real destinations instead of `href="#"`.
 
 ### 0.1.0 — 2026-09-15
 
