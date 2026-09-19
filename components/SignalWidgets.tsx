@@ -3,10 +3,22 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-const WAVE_PATHS = [
-  "M0 20 C 10 4, 20 4, 30 20 S 50 36, 60 20 S 80 4, 90 20 S 110 36, 120 20",
-  "M0 20 L10 6 L20 32 L30 10 L40 28 L50 8 L60 30 L70 12 L80 26 L90 10 L100 24 L110 14 L120 20",
-  "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
+const WAVE_FRAMES = [
+  [
+    "M0 20 C 10 4, 20 4, 30 20 S 50 36, 60 20 S 80 4, 90 20 S 110 36, 120 20",
+    "M0 20 C 10 36, 20 36, 30 20 S 50 4, 60 20 S 80 36, 90 20 S 110 4, 120 20",
+    "M0 20 C 10 4, 20 4, 30 20 S 50 36, 60 20 S 80 4, 90 20 S 110 36, 120 20",
+  ],
+  [
+    "M0 20 L10 6 L20 32 L30 10 L40 28 L50 8 L60 30 L70 12 L80 26 L90 10 L100 24 L110 14 L120 20",
+    "M0 20 L10 32 L20 6 L30 28 L40 10 L50 30 L60 8 L70 26 L80 12 L90 24 L100 10 L110 20 L120 20",
+    "M0 20 L10 6 L20 32 L30 10 L40 28 L50 8 L60 30 L70 12 L80 26 L90 10 L100 24 L110 14 L120 20",
+  ],
+  [
+    "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
+    "M0 34 C 20 20, 50 34, 55 20 C 60 6, 100 20, 120 6",
+    "M0 34 C 30 34, 40 34, 55 20 C 70 6, 90 6, 120 6",
+  ],
 ];
 
 export function Waveform({
@@ -18,26 +30,21 @@ export function Waveform({
 }) {
   const prefersReducedMotion = useReducedMotion();
   const stroke =
-    accent === "signal" ? "var(--color-signal)" : "var(--color-cyan)";
+    accent === "signal" ? "var(--color-signal)" : "var(--color-cyan-bright)";
 
   return (
     <svg viewBox="0 0 120 40" className="h-10 w-full overflow-visible">
       <motion.path
-        d={WAVE_PATHS[variant]}
+        d={WAVE_FRAMES[variant][0]}
         fill="none"
         stroke={stroke}
-        strokeWidth="1.5"
+        strokeWidth="2"
         strokeLinecap="round"
-        opacity={0.85}
-        initial={false}
-        animate={
-          prefersReducedMotion
-            ? { pathLength: 1, pathOffset: 0 }
-            : { pathOffset: [0, 0.55, 0] }
-        }
-        style={prefersReducedMotion ? undefined : { pathLength: 0.5 }}
+        opacity={0.95}
+        style={{ filter: `drop-shadow(0 0 5px ${stroke})` }}
+        animate={prefersReducedMotion ? undefined : { d: WAVE_FRAMES[variant] }}
         transition={{
-          duration: 3.2 + variant * 0.6,
+          duration: 2.4 + variant * 0.7,
           repeat: Infinity,
           ease: "easeInOut",
         }}
@@ -56,24 +63,29 @@ export function Knob({
   accent?: "cyan" | "signal";
 }) {
   const prefersReducedMotion = useReducedMotion();
-  const borderClass = accent === "signal" ? "border-signal/40" : "border-cyan/40";
-  const needleClass = accent === "signal" ? "bg-signal" : "bg-cyan";
+  const glowColor =
+    accent === "signal" ? "var(--color-signal)" : "var(--color-cyan-bright)";
+  const borderClass = accent === "signal" ? "border-signal/60" : "border-cyan-bright/60";
+  const needleClass = accent === "signal" ? "bg-signal" : "bg-cyan-bright";
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <div className={`relative h-6 w-6 rounded-full border ${borderClass}`}>
+      <div
+        className={`relative h-7 w-7 rounded-full border-2 ${borderClass}`}
+        style={{ boxShadow: `0 0 8px ${glowColor}66` }}
+      >
         <motion.span
-          className={`absolute left-1/2 top-1/2 h-2 w-px origin-top ${needleClass}`}
-          style={{ x: "-50%" }}
+          className={`absolute left-1/2 top-1/2 h-2.5 w-[2px] origin-top rounded-full ${needleClass}`}
+          style={{ x: "-50%", boxShadow: `0 0 6px ${glowColor}` }}
           animate={
             prefersReducedMotion
               ? { rotate: angle }
-              : { rotate: [angle - 5, angle + 5, angle - 5] }
+              : { rotate: [angle - 18, angle + 18, angle - 18] }
           }
           transition={
             prefersReducedMotion
               ? undefined
-              : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
+              : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
           }
         />
       </div>
@@ -89,11 +101,15 @@ export function Bar({ index }: { index: number }) {
   const height = Math.round(Math.max(12, Math.min(92, base)) * 100) / 100;
   return (
     <motion.div
-      className="w-[2px] rounded-full bg-gradient-to-t from-cyan/30 via-cyan to-signal"
-      style={{ height: `${height}%` }}
-      animate={{ scaleY: [1, 0.45, 1] }}
+      className="w-[3px] rounded-full bg-gradient-to-t from-cyan/40 via-cyan-bright to-signal"
+      style={{
+        height: `${height}%`,
+        transformOrigin: "bottom",
+        filter: "drop-shadow(0 0 3px rgba(57, 230, 242, 0.6))",
+      }}
+      animate={{ scaleY: [1, 0.25, 1.15, 0.5, 1] }}
       transition={{
-        duration: 1.4 + (index % 5) * 0.2,
+        duration: 1.1 + (index % 5) * 0.2,
         repeat: Infinity,
         ease: "easeInOut",
         delay: (index % 7) * 0.08,
@@ -114,15 +130,19 @@ export function HarmonicBars({ count = 24 }: { count?: number }) {
         return (
           <motion.div
             key={i}
-            className="flex-1 rounded-t-sm bg-gradient-to-t from-cyan/20 via-cyan to-signal"
-            style={{ height: `${height}%` }}
+            className="flex-1 rounded-t-sm bg-gradient-to-t from-cyan/30 via-cyan-bright to-signal"
+            style={{
+              height: `${height}%`,
+              transformOrigin: "bottom",
+              filter: "drop-shadow(0 0 3px rgba(57, 230, 242, 0.5))",
+            }}
             animate={
               prefersReducedMotion
                 ? undefined
-                : { scaleY: [0.35, 1, 0.5, 0.9, 0.35] }
+                : { scaleY: [0.3, 1.1, 0.45, 0.95, 0.3] }
             }
             transition={{
-              duration: 1.8 + (i % 6) * 0.15,
+              duration: 1.4 + (i % 6) * 0.15,
               repeat: Infinity,
               ease: "easeInOut",
               delay: (i % 8) * 0.1,
@@ -137,7 +157,7 @@ export function HarmonicBars({ count = 24 }: { count?: number }) {
 /** Pulsing radar sweep, styled after MIKU-19's SYSTEM DIAGNOSTICS radar. */
 export function RadarPulse({ accent = "cyan" }: { accent?: "cyan" | "signal" }) {
   const prefersReducedMotion = useReducedMotion();
-  const stroke = accent === "signal" ? "var(--color-signal)" : "var(--color-cyan)";
+  const stroke = accent === "signal" ? "var(--color-signal)" : "var(--color-cyan-bright)";
   const gridStroke =
     accent === "signal" ? "rgba(255, 63, 164, 0.15)" : "rgba(57, 230, 242, 0.15)";
 
@@ -156,9 +176,10 @@ export function RadarPulse({ accent = "cyan" }: { accent?: "cyan" | "signal" }) 
       <line x1="10" y1="50" x2="90" y2="50" stroke={gridStroke} strokeWidth="0.5" />
       <motion.polygon
         points={polyStates[0]}
-        fill={accent === "signal" ? "rgba(255, 63, 164, 0.1)" : "rgba(57, 230, 242, 0.1)"}
+        fill={accent === "signal" ? "rgba(255, 63, 164, 0.12)" : "rgba(57, 230, 242, 0.12)"}
         stroke={stroke}
-        strokeWidth="1"
+        strokeWidth="1.5"
+        style={{ filter: `drop-shadow(0 0 4px ${stroke})` }}
         animate={prefersReducedMotion ? undefined : { points: polyStates }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -167,6 +188,7 @@ export function RadarPulse({ accent = "cyan" }: { accent?: "cyan" | "signal" }) 
         cy="50"
         r="2"
         fill={stroke}
+        style={{ filter: `drop-shadow(0 0 4px ${stroke})` }}
         animate={
           prefersReducedMotion
             ? undefined
