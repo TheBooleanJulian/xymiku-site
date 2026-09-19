@@ -33,6 +33,17 @@ html {
   color-scheme: dark;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Clears the fixed header so an anchor's target isn't scrolled under it. */
+[id] {
+  scroll-margin-top: 80px;
+}
+
 body {
   background: var(--color-black);
   color: var(--color-ink);
