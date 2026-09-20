@@ -1,0 +1,31 @@
+name: Refresh Instagram feed
+
+# The homepage's Instagram section (components/InstagramFeed.tsx) is fetched
+# at build time from an RSS.app feed. The photo URLs it returns are signed
+# Instagram CDN links that expire after a few days, and this site is a
+# static export (deployed once, no server) — so without a periodic rebuild,
+# those images go stale and 404 until the next real deploy.
+#
+# This pushes an empty commit on a schedule purely to retrigger Zeabur's
+# git-push-based auto-deploy, which re-runs `next build` and re-fetches a
+# fresh feed. It changes nothing in the repo except a commit.
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily, 06:00 UTC — comfortably inside the ~4-5 day expiry window
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push empty commit to trigger a Zeabur rebuild
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "chore: scheduled rebuild (refresh Instagram feed)"
+          git push

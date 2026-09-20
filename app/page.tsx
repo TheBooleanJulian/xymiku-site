@@ -14,13 +14,15 @@ import {
   getCharacterIndex,
   getFeaturedCosplay,
 } from "@/lib/data";
+import { getInstagramFeed } from "@/lib/instagram";
 
 export default async function Home() {
-  const [events, timelineImages, characters, featuredCosplay] = await Promise.all([
+  const [events, timelineImages, characters, featuredCosplay, instagramPosts] = await Promise.all([
     getRecentEvents(),
     getTimelineImages(),
     getCharacterIndex(),
     getFeaturedCosplay(),
+    getInstagramFeed(),
   ]);
 
   return (
@@ -28,7 +30,7 @@ export default async function Home() {
       <Header />
       <main>
         <Hero />
-        <InstagramFeed />
+        <InstagramFeed posts={instagramPosts} />
         <PhotoDelivery events={events} />
         <UplinkTimeline images={timelineImages} />
         <CharacterIndex characters={characters} />

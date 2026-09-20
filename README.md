@@ -47,7 +47,8 @@ throughout as the site's signature motif.
   the main hero, flanked by HUD side panels (capture-module dials, uplink
   signal waveform, live parameter readouts), with CTAs to the photo search,
   the timeline, and the Instagram feed.
-- **Instagram feed** — an embedded RSS.app wall widget for @xymiku.39, sat
+- **Instagram feed** — an auto-scrolling marquee of recent @xymiku.39 posts
+  (photo + caption preview), fetched at build time from an RSS.app feed, sat
   between the hero and the photo search.
 - **Photo delivery search** — a "find your photos" bar for looking up a shoot
   by event / cosplayer / character (UI complete, backend not yet wired — see
@@ -70,7 +71,7 @@ The homepage (`app/page.tsx`) composes these components in order:
 |---|---|---|
 | `Header` | Done | Sticky nav with an animated mobile hamburger menu; links to real in-page anchors. |
 | `Hero` | Built, mock content | Animated boot sequence, HUD side panels, waveform decorations, three CTAs (photo search, uplink timeline, Instagram). |
-| `InstagramFeed` | Done | Embeds the RSS.app wall widget for @xymiku.39. |
+| `InstagramFeed` | Built, real data | Infinite-scroll marquee of the 6 most recent @xymiku.39 posts, fetched at build time (`lib/instagram.ts`). See [Maintenance](#maintenance). |
 | `PhotoDelivery` | UI done, not wired up | A "find your photos" search form — currently a no-op (`preventDefault` only, no real search). |
 | `UplinkTimeline` | Built, mock content | Horizontal-scroll timeline of shoot history. |
 | `UplinkPlaceholder` | **Explicit placeholder** | Renders a generated gradient in place of a real photo — a documented stand-in until the archive is wired to real images. |
@@ -105,6 +106,26 @@ Open [http://localhost:3000](http://localhost:3000) to see it. Edit
 | `npm run start` | Serve the production build. |
 | `npm run lint` | Run ESLint. |
 
+## Maintenance
+
+**Instagram feed image staleness.** `lib/instagram.ts` fetches
+`https://rss.app/feeds/v1.1/9NH3qtc3KAQCoiuj.json` at build time. That feed
+returns Instagram's own CDN URLs for each photo, and those URLs are signed
+and expire after roughly 4-5 days. Since this site is a static export
+(built once, deployed as flat files, no server), the Instagram section's
+photos will 404 once their URLs expire — until the next build re-fetches
+the feed with fresh URLs.
+
+`.github/workflows/refresh-instagram-feed.yml` covers this: it pushes an
+empty commit daily, which retriggers Zeabur's git-push-based auto-deploy
+and so re-runs the build. No manual action needed as long as that workflow
+stays enabled and Zeabur stays connected to this repo.
+
+**6-item cap.** The RSS.app feed only returns the 6 most recent posts —
+raising that requires upgrading the RSS.app plan for this feed, not a code
+change. The marquee loops those 6 seamlessly rather than showing ~30
+distinct posts.
+
 ## Roadmap
 
 Rough order, subject to change:
@@ -138,8 +159,11 @@ changes are recorded below; dates reflect the corresponding commit.
 
 - HUD side panels added to the hero, evolving the cockpit aesthetic
   (capture-module dials, archive signal waveform, live parameter readouts).
-- Added `InstagramFeed` (RSS.app wall widget for @xymiku.39) between the
-  hero and the photo search, plus a third hero CTA linking to it.
+- Added `InstagramFeed` between the hero and the photo search, plus a third
+  hero CTA linking to it. Now an auto-scrolling marquee of the 6 most
+  recent @xymiku.39 posts (photo + caption), fetched at build time from an
+  RSS.app JSON feed — see [Maintenance](#maintenance) for the image-staleness
+  caveat and the scheduled-rebuild workaround.
 - Removed `SystemDiagnostics`, `Portfolio`, `VisualSynthesis`, and
   `MikuSignature` — trimmed the homepage down to the sections above.
 - Footer: dropped the Twitter/X button; Instagram and Email now link to
