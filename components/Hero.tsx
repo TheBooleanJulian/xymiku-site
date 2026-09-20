@@ -17,6 +17,20 @@ const heroImage: UplinkImage = {
 
 const MIKU_LINES = ["MIKU", "IMAGES", "KAWAII", "UPLINK"];
 
+const HERO_CTAS = [
+  { href: "#photo-delivery", title: "FIND YOUR PHOTOS", subtitle: "DOWNLOAD NOW" },
+  { href: "#uplink", title: "EXPLORE THE UPLINK", subtitle: "COS ARCHIVE" },
+  { href: "#instagram", title: "INSTAGRAM UPLINK", subtitle: "LET'S COLLAB" },
+  {
+    href: "https://t.me/+Sf2gP6A4U7VkMWNl",
+    title: "MEEGOO CHANNEL",
+    subtitle: "LET'S TELE YAP",
+    external: true,
+  },
+];
+
+const CTA_CLIP_PATH = "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)";
+
 function CaptureModulePanel() {
   return (
     <div className="hud-corners hidden h-full flex-col gap-6 border-r border-cyan/15 bg-black/85 px-4 py-6 backdrop-blur-sm lg:flex">
@@ -223,45 +237,24 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
-            <a
-              href="#photo-delivery"
-              style={{
-                clipPath:
-                  "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
-              }}
-              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
-            >
-              <span className="block font-display text-sm font-bold tracking-[0.15em]">
-                FIND YOUR PHOTOS
-              </span>
-              <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
-                UPLINK ACCESS // READY
-              </span>
-            </a>
-            <a
-              href="#uplink"
-              style={{ animationDelay: "-1s" }}
-              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
-            >
-              EXPLORE THE UPLINK
-            </a>
-            <a
-              href="#instagram"
-              style={{ animationDelay: "-2s" }}
-              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
-            >
-              INSTAGRAM UPLINK
-            </a>
-            <a
-              href="https://t.me/+Sf2gP6A4U7VkMWNl"
-              target="_blank"
-              rel="noopener"
-              style={{ animationDelay: "-3s" }}
-              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
-            >
-              MEEGOO CHANNEL
-            </a>
+          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center xl:max-w-4xl xl:flex-nowrap">
+            {HERO_CTAS.map((cta, i) => (
+              <a
+                key={cta.title}
+                href={cta.href}
+                target={cta.external ? "_blank" : undefined}
+                rel={cta.external ? "noopener" : undefined}
+                style={{ clipPath: CTA_CLIP_PATH, animationDelay: `-${i}s` }}
+                className="gradient-flow flex-1 border-2 border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center text-black shadow-[0_0_18px_rgba(57,230,242,0.55)] transition-transform hover:scale-[1.02]"
+              >
+                <span className="block font-display text-sm font-bold tracking-[0.15em]">
+                  {cta.title}
+                </span>
+                <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
+                  {cta.subtitle}
+                </span>
+              </a>
+            ))}
           </div>
         </div>
 
