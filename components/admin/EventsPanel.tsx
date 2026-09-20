@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { driveThumbUrl } from "@/lib/luxsync";
 
 type EventRow = {
   id: string;
@@ -29,6 +30,30 @@ const BLANK: EventRow = {
 
 const input =
   "w-full border border-cyan/30 bg-black px-2 py-1.5 font-technical text-xs text-ink focus:border-cyan focus:outline-none";
+
+// Shows what the cover crop actually looks like — the dropdown alone is
+// just words, this renders the real photo with that object-position applied.
+function CropPreview({ fileId, position }: { fileId: string; position: "top" | "center" | "bottom" }) {
+  if (!fileId) {
+    return (
+      <p className="mt-1 max-w-[7rem] font-technical text-[9px] leading-tight text-mute">
+        set a cover file id to preview
+      </p>
+    );
+  }
+  const positionClass =
+    position === "top" ? "object-top" : position === "bottom" ? "object-bottom" : "object-center";
+  return (
+    <div className="relative mt-1 h-16 w-24 overflow-hidden border border-cyan/20 bg-deep">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={driveThumbUrl(fileId)}
+        alt="Cover crop preview"
+        className={`h-full w-full object-cover ${positionClass}`}
+      />
+    </div>
+  );
+}
 
 export function EventsPanel() {
   const [rows, setRows] = useState<EventRow[]>([]);
@@ -193,17 +218,20 @@ export function EventsPanel() {
           value={creating.external_url ?? ""}
           onChange={(e) => setCreating({ ...creating, external_url: e.target.value })}
         />
-        <select
-          className={input}
-          value={creating.cover_position}
-          onChange={(e) =>
-            setCreating({ ...creating, cover_position: e.target.value as EventRow["cover_position"] })
-          }
-        >
-          <option value="center">cover crop: center</option>
-          <option value="top">cover crop: top</option>
-          <option value="bottom">cover crop: bottom</option>
-        </select>
+        <div>
+          <select
+            className={input}
+            value={creating.cover_position}
+            onChange={(e) =>
+              setCreating({ ...creating, cover_position: e.target.value as EventRow["cover_position"] })
+            }
+          >
+            <option value="center">cover crop: center</option>
+            <option value="top">cover crop: top</option>
+            <option value="bottom">cover crop: bottom</option>
+          </select>
+          <CropPreview fileId={creating.cover_drive_file_id ?? ""} position={creating.cover_position} />
+        </div>
         <input
           className={input}
           type="number"
@@ -314,6 +342,10 @@ export function EventsPanel() {
                         <option value="top">top</option>
                         <option value="bottom">bottom</option>
                       </select>
+                      <CropPreview
+                        fileId={draft.cover_drive_file_id ?? ""}
+                        position={draft.cover_position}
+                      />
                     </td>
                     <td className="p-2">
                       <input

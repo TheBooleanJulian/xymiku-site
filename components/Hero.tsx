@@ -211,9 +211,7 @@ export function Hero() {
               VISUAL UPLINK
             </p>
 
-            {/* Hidden at lg+ (desktop): this block covers faces in the photo there.
-               The photo crops differently on mobile, where it doesn't. */}
-            <div className="mt-6 flex flex-col items-center gap-1 lg:hidden">
+            <div className="mt-6 flex flex-col items-center gap-1">
               {MIKU_LINES.map((line) => (
                 <span
                   key={line}
@@ -225,7 +223,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
             <a
               href="#photo-delivery"
               style={{
@@ -254,6 +252,15 @@ export function Hero() {
               className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
             >
               INSTAGRAM UPLINK
+            </a>
+            <a
+              href="https://t.me/+Sf2gP6A4U7VkMWNl"
+              target="_blank"
+              rel="noopener"
+              style={{ animationDelay: "-3s" }}
+              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
+            >
+              MEEGOO CHANNEL
             </a>
           </div>
         </div>
