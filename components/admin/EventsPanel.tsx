@@ -12,6 +12,7 @@ type EventRow = {
   cover_drive_file_id: string | null;
   external_url: string | null;
   cover_position: "top" | "center" | "bottom";
+  image_count_override: number | null;
 };
 
 const BLANK: EventRow = {
@@ -23,6 +24,7 @@ const BLANK: EventRow = {
   cover_drive_file_id: "",
   external_url: "",
   cover_position: "center",
+  image_count_override: null,
 };
 
 const input =
@@ -40,7 +42,7 @@ export function EventsPanel() {
   async function load() {
     const { data, error } = await supabase
       .from("events")
-      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
+      .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position,image_count_override")
       .order("event_date", { ascending: false });
     if (error) setError(error.message);
     else setRows(data as EventRow[]);
@@ -51,7 +53,7 @@ export function EventsPanel() {
     (async () => {
       const { data, error } = await supabase
         .from("events")
-        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
+        .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position,image_count_override")
         .order("event_date", { ascending: false });
       if (error) setError(error.message);
       else setRows(data as EventRow[]);
@@ -65,6 +67,7 @@ export function EventsPanel() {
       ...row,
       cover_drive_file_id: row.cover_drive_file_id ?? "",
       external_url: row.external_url ?? "",
+      image_count_override: row.image_count_override,
     });
   }
 
@@ -81,6 +84,7 @@ export function EventsPanel() {
         cover_drive_file_id: draft.cover_drive_file_id || null,
         external_url: draft.external_url || null,
         cover_position: draft.cover_position,
+        image_count_override: draft.image_count_override,
       })
       .eq("id", editingId);
     setSaving(false);
@@ -113,6 +117,7 @@ export function EventsPanel() {
       cover_drive_file_id: creating.cover_drive_file_id || null,
       external_url: creating.external_url || null,
       cover_position: creating.cover_position,
+      image_count_override: creating.image_count_override,
     });
     setSaving(false);
     if (error) {
@@ -199,6 +204,18 @@ export function EventsPanel() {
           <option value="top">cover crop: top</option>
           <option value="bottom">cover crop: bottom</option>
         </select>
+        <input
+          className={input}
+          type="number"
+          placeholder="image_count_override (only for events with no Drive folder)"
+          value={creating.image_count_override ?? ""}
+          onChange={(e) =>
+            setCreating({
+              ...creating,
+              image_count_override: e.target.value ? Number(e.target.value) : null,
+            })
+          }
+        />
         <button
           type="submit"
           disabled={saving}
@@ -223,6 +240,7 @@ export function EventsPanel() {
                 <th className="p-2">Cover file</th>
                 <th className="p-2">External URL</th>
                 <th className="p-2">Crop</th>
+                <th className="p-2"># override</th>
                 <th className="p-2" />
               </tr>
             </thead>
@@ -297,6 +315,19 @@ export function EventsPanel() {
                         <option value="bottom">bottom</option>
                       </select>
                     </td>
+                    <td className="p-2">
+                      <input
+                        className={input}
+                        type="number"
+                        value={draft.image_count_override ?? ""}
+                        onChange={(e) =>
+                          setDraft({
+                            ...draft,
+                            image_count_override: e.target.value ? Number(e.target.value) : null,
+                          })
+                        }
+                      />
+                    </td>
                     <td className="whitespace-nowrap p-2">
                       <button
                         onClick={saveEdit}
@@ -320,6 +351,7 @@ export function EventsPanel() {
                     <td className="p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
                     <td className="max-w-[160px] truncate p-2 text-mute">{row.external_url ?? "—"}</td>
                     <td className="p-2 text-mute">{row.cover_position}</td>
+                    <td className="p-2 text-mute">{row.image_count_override ?? "—"}</td>
                     <td className="whitespace-nowrap p-2">
                       <button onClick={() => startEdit(row)} className="mr-2 text-cyan hover:underline">
                         EDIT

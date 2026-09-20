@@ -70,9 +70,11 @@ export function PhotoDelivery({ events: recentEvents }: { events: UplinkEvent[] 
                 <p className="mt-1 font-technical text-xs text-mute">
                   {event.date}
                 </p>
-                <p className="mt-1 font-technical text-xs text-mute">
-                  {event.imageCount.toLocaleString()} IMAGES
-                </p>
+                {event.imageCount > 0 && (
+                  <p className="mt-1 font-technical text-xs text-mute">
+                    {event.imageCount.toLocaleString()} IMAGES
+                  </p>
+                )}
                 {event.status === "processing" ? (
                   <p className="hud-badge-alert mt-2 font-technical text-[10px] tracking-[0.15em]">
                     {STATUS_LABEL[event.status]}

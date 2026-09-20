@@ -7,7 +7,8 @@
 //     [--drive-folder-id 1Hicrzj1HwGDV_jwIBvETbR76DVwrRZwj] \
 //     [--status online] [--cover-file-id <a specific Drive file id>] \
 //     [--cover-position center|top|bottom] \
-//     [--external-url <link to use until a Drive folder exists>]
+//     [--external-url <link to use until a Drive folder exists>] \
+//     [--image-count <manual count, for events with no drive-folder-id>]
 //
 // There is no file upload here: the photos already live in the Drive folder
 // (the usual PhotoVault workflow) and LuxSync reads/caches them directly.
@@ -28,6 +29,10 @@
 // back to --external-url (a preview gallery hosted elsewhere) or just links
 // to the homepage if neither is set. Re-run with --drive-folder-id once the
 // real folder exists to switch the card over to it.
+//
+// --image-count only matters without --drive-folder-id (e.g. delivered via
+// Pixieset/Lightroom instead of Drive) — there's no API to count those
+// automatically, so the "N IMAGES" line is just hidden unless you set this.
 //
 // Requires .env.local with NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
 // (the service role key, NOT the anon key — RLS blocks writes from the anon key).
@@ -75,6 +80,7 @@ async function main() {
   if (args["cover-file-id"]) row.cover_drive_file_id = args["cover-file-id"];
   if (args["external-url"]) row.external_url = args["external-url"];
   if (args["cover-position"]) row.cover_position = args["cover-position"];
+  if (args["image-count"]) row.image_count_override = Number(args["image-count"]);
 
   const { error } = await supabase.from("events").upsert(row);
   if (error) throw error;

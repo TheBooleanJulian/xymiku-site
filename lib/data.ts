@@ -11,6 +11,7 @@ type EventRow = {
   cover_drive_file_id: string | null;
   external_url: string | null;
   cover_position: UplinkEvent["coverPosition"];
+  image_count_override: number | null;
 };
 
 type CuratedImageRow = {
@@ -59,7 +60,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
       id: row.id,
       name: row.name,
       date: formatDate(row.event_date),
-      imageCount: 0,
+      imageCount: row.image_count_override ?? 0,
       status: row.status,
       cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
       coverPosition: row.cover_position,
@@ -85,7 +86,7 @@ async function eventToUplinkEvent(row: EventRow): Promise<UplinkEvent> {
 export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position,image_count_override")
     .order("event_date", { ascending: false })
     .limit(limit);
   if (error) throw error;
@@ -100,7 +101,7 @@ export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
 export async function getAllEvents(): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position")
+    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position,image_count_override")
     .order("event_date", { ascending: false });
   if (error) throw error;
 
@@ -108,7 +109,7 @@ export async function getAllEvents(): Promise<UplinkEvent[]> {
     id: row.id,
     name: row.name,
     date: formatDate(row.event_date),
-    imageCount: 0,
+    imageCount: row.drive_folder_id ? 0 : (row.image_count_override ?? 0),
     status: row.status,
     cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
     coverPosition: row.cover_position,

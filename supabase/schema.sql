@@ -26,6 +26,10 @@ create table if not exists events (
   -- (object-position). Landscape covers crop fine at "center"; portrait
   -- covers often need "top" to keep a face in frame.
   cover_position text not null default 'center' check (cover_position in ('top', 'center', 'bottom')),
+  -- Manual image count for events with no drive_folder_id (e.g. delivered
+  -- via Pixieset/Lightroom instead of Drive) — there's no API to count
+  -- those automatically. Leave unset to just hide the "N IMAGES" line.
+  image_count_override int,
   created_at timestamptz not null default now()
 );
 
@@ -92,3 +96,4 @@ alter table events add column if not exists external_url text;
 alter table events add column if not exists cover_position text not null default 'center';
 alter table events drop constraint if exists events_cover_position_check;
 alter table events add constraint events_cover_position_check check (cover_position in ('top', 'center', 'bottom'));
+alter table events add column if not exists image_count_override int;
