@@ -196,14 +196,14 @@ export function Hero() {
       <div className="relative z-10 grid flex-1 lg:grid-cols-[240px_1fr_240px]">
         <CaptureModulePanel />
 
-        <div className="relative flex flex-col justify-end overflow-hidden px-4 pb-12 pt-8 sm:px-6 sm:pb-20">
+        <div className="relative flex flex-col justify-between overflow-hidden px-4 pb-10 pt-10 sm:px-6 sm:pb-14 sm:pt-14">
           <div className="absolute inset-0">
             <UplinkPlaceholder image={heroImage} showMeta={false} className="h-full w-full" />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/45 to-transparent" />
           <div className="absolute inset-0 scanline" />
 
-          <div className="relative z-10">
+          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center text-center">
             <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-ink text-glow sm:text-7xl lg:text-8xl">
               XYMIKU<span className="text-cyan">.39</span>
             </h1>
@@ -211,46 +211,46 @@ export function Hero() {
               VISUAL UPLINK
             </p>
 
-            <div className="mt-8 flex flex-col gap-1 border-l-2 border-cyan/50 pl-4">
+            <div className="mt-6 flex flex-col items-center gap-1 border-t-2 border-cyan/50 pt-4">
               {MIKU_LINES.map((line) => (
                 <span
                   key={line}
-                  className="font-display text-2xl font-bold tracking-wide text-ink sm:text-3xl"
+                  className="font-display text-xl font-bold tracking-wide text-ink sm:text-2xl"
                 >
                   {line}
                 </span>
               ))}
             </div>
+          </div>
 
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <a
-                href="#photo-delivery"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
-                }}
-                className="flex-1 bg-gradient-to-r from-cyan to-signal px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
-              >
-                <span className="block font-display text-sm font-bold tracking-[0.15em]">
-                  FIND YOUR PHOTOS
-                </span>
-                <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
-                  UPLINK ACCESS // READY
-                </span>
-              </a>
-              <a
-                href="#uplink"
-                className="flex-1 border border-cyan/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
-              >
-                EXPLORE THE UPLINK
-              </a>
-              <a
-                href="#instagram"
-                className="flex-1 border border-cyan/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
-              >
-                INSTAGRAM UPLINK
-              </a>
-            </div>
+          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:justify-center">
+            <a
+              href="#photo-delivery"
+              style={{
+                clipPath:
+                  "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
+              }}
+              className="flex-1 bg-gradient-to-r from-cyan to-signal px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
+            >
+              <span className="block font-display text-sm font-bold tracking-[0.15em]">
+                FIND YOUR PHOTOS
+              </span>
+              <span className="mt-0.5 block font-technical text-[9px] tracking-[0.2em] opacity-70">
+                UPLINK ACCESS // READY
+              </span>
+            </a>
+            <a
+              href="#uplink"
+              className="flex-1 border border-cyan/50 bg-black/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan backdrop-blur-sm transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
+            >
+              EXPLORE THE UPLINK
+            </a>
+            <a
+              href="#instagram"
+              className="flex-1 border border-cyan/50 bg-black/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan backdrop-blur-sm transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
+            >
+              INSTAGRAM UPLINK
+            </a>
           </div>
         </div>
 
