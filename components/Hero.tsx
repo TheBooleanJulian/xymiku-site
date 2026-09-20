@@ -237,7 +237,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="relative z-10 mx-auto flex w-full max-w-xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center xl:max-w-3xl xl:flex-nowrap">
+          <div className="relative z-10 mx-auto grid w-full max-w-xl grid-cols-2 gap-2 sm:flex sm:flex-row sm:flex-wrap sm:justify-center xl:max-w-3xl xl:flex-nowrap">
             {HERO_CTAS.map((cta, i) => (
               <a
                 key={cta.title}
@@ -245,12 +245,12 @@ export function Hero() {
                 target={cta.external ? "_blank" : undefined}
                 rel={cta.external ? "noopener" : undefined}
                 style={{ clipPath: CTA_CLIP_PATH, animationDelay: `-${i}s` }}
-                className="gradient-flow flex-1 border border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-4 py-2.5 text-center text-black shadow-[0_0_12px_rgba(57,230,242,0.5)] transition-transform hover:scale-[1.02]"
+                className="gradient-flow border border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-3 py-2 text-center text-black shadow-[0_0_12px_rgba(57,230,242,0.5)] transition-transform hover:scale-[1.02] sm:flex-1 sm:px-4 sm:py-2.5"
               >
-                <span className="block font-display text-xs font-bold tracking-[0.1em]">
+                <span className="block font-display text-[10px] font-bold tracking-[0.05em] sm:text-xs sm:tracking-[0.1em]">
                   {cta.title}
                 </span>
-                <span className="mt-0.5 block font-technical text-[8px] tracking-[0.15em] opacity-70">
+                <span className="mt-0.5 block font-technical text-[7px] tracking-[0.1em] opacity-70 sm:text-[8px] sm:tracking-[0.15em]">
                   {cta.subtitle}
                 </span>
               </a>
