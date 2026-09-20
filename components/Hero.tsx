@@ -211,7 +211,9 @@ export function Hero() {
               VISUAL UPLINK
             </p>
 
-            <div className="mt-6 flex flex-col items-center gap-1 border-t-2 border-cyan/50 pt-4">
+            {/* Hidden at lg+ (desktop): this block covers faces in the photo there.
+               The photo crops differently on mobile, where it doesn't. */}
+            <div className="mt-6 flex flex-col items-center gap-1 lg:hidden">
               {MIKU_LINES.map((line) => (
                 <span
                   key={line}
@@ -230,7 +232,7 @@ export function Hero() {
                 clipPath:
                   "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)",
               }}
-              className="flex-1 bg-gradient-to-r from-cyan to-signal px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
+              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center text-black transition-transform hover:scale-[1.02] sm:flex-none"
             >
               <span className="block font-display text-sm font-bold tracking-[0.15em]">
                 FIND YOUR PHOTOS
@@ -241,13 +243,15 @@ export function Hero() {
             </a>
             <a
               href="#uplink"
-              className="flex-1 border border-cyan/50 bg-black/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan backdrop-blur-sm transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
+              style={{ animationDelay: "-1s" }}
+              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
             >
               EXPLORE THE UPLINK
             </a>
             <a
               href="#instagram"
-              className="flex-1 border border-cyan/50 bg-black/50 px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-cyan backdrop-blur-sm transition-colors hover:border-cyan hover:bg-cyan/10 sm:flex-none"
+              style={{ animationDelay: "-2s" }}
+              className="gradient-flow flex-1 bg-gradient-to-r from-cyan via-signal to-cyan px-6 py-4 text-center font-display text-sm font-bold tracking-[0.15em] text-black transition-transform hover:scale-[1.02] sm:flex-none"
             >
               INSTAGRAM UPLINK
             </a>

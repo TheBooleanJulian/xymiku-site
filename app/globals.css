@@ -113,6 +113,28 @@ body {
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
+@keyframes gradient-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-flow {
+  background-size: 200% 200%;
+  animation: gradient-flow 3s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-flow {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+
 /* Small corner-bracket accents used on HUD panels */
 .hud-corners {
   position: relative;
