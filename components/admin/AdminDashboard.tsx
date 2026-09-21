@@ -14,7 +14,7 @@ export function AdminDashboard({ userEmail }: { userEmail: string }) {
 
   return (
     <main className="min-h-screen bg-black px-4 py-8 sm:px-6">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan/15 pb-4">
           <div>
             <p className="font-technical text-[11px] tracking-[0.3em] text-cyan">

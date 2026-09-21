@@ -227,7 +227,18 @@ export function CuratedImagesPanel() {
         <p className="font-technical text-xs text-mute">LOADING...</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse font-technical text-xs">
+          <table className="w-full table-fixed border-collapse font-technical text-xs">
+            <colgroup>
+              <col className="w-[10%]" />
+              <col className="w-[14%]" />
+              <col className="w-[10%]" />
+              <col className="w-[7%]" />
+              <col className="w-[13%]" />
+              <col className="w-[13%]" />
+              <col className="w-[13%]" />
+              <col className="w-[14%]" />
+              <col className="w-[6%]" />
+            </colgroup>
             <thead>
               <tr className="border-b border-cyan/15 text-left text-mute">
                 <th className="p-2">ID</th>
@@ -245,7 +256,7 @@ export function CuratedImagesPanel() {
               {rows.map((row) =>
                 editingId === row.id ? (
                   <tr key={row.id} className="border-b border-cyan/10">
-                    <td className="p-2 text-mute">{row.id}</td>
+                    <td className="truncate p-2 text-mute">{row.id}</td>
                     <td className="p-2">
                       <input
                         className={input}
@@ -333,14 +344,14 @@ export function CuratedImagesPanel() {
                   </tr>
                 ) : (
                   <tr key={row.id} className="border-b border-cyan/10 align-top">
-                    <td className="p-2 text-mute">{row.id}</td>
-                    <td className="max-w-[160px] truncate p-2 text-mute">{row.drive_file_id}</td>
-                    <td className="p-2 text-mute">{row.category}</td>
-                    <td className="p-2 text-mute">{row.year}</td>
-                    <td className="p-2 text-ink">{row.character ?? "—"}</td>
-                    <td className="p-2 text-mute">{row.cosplayer ?? "—"}</td>
-                    <td className="p-2 text-mute">{row.event_label ?? "—"}</td>
-                    <td className="p-2 text-mute">
+                    <td className="truncate p-2 text-mute">{row.id}</td>
+                    <td className="truncate p-2 text-mute">{row.drive_file_id}</td>
+                    <td className="truncate p-2 text-mute">{row.category}</td>
+                    <td className="truncate p-2 text-mute">{row.year}</td>
+                    <td className="truncate p-2 text-ink">{row.character ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.cosplayer ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.event_label ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">
                       {[row.featured && "featured", row.timeline_pick && "timeline", row.portfolio_pick && "portfolio"]
                         .filter(Boolean)
                         .join(", ") || "—"}

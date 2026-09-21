@@ -168,7 +168,15 @@ export function CharactersPanel() {
         <p className="font-technical text-xs text-mute">LOADING...</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse font-technical text-xs">
+          <table className="w-full table-fixed border-collapse font-technical text-xs">
+            <colgroup>
+              <col className="w-[15%]" />
+              <col className="w-[20%]" />
+              <col className="w-[15%]" />
+              <col className="w-[20%]" />
+              <col className="w-[18%]" />
+              <col className="w-[12%]" />
+            </colgroup>
             <thead>
               <tr className="border-b border-cyan/15 text-left text-mute">
                 <th className="p-2">ID</th>
@@ -183,7 +191,7 @@ export function CharactersPanel() {
               {rows.map((row) =>
                 editingId === row.id ? (
                   <tr key={row.id} className="border-b border-cyan/10">
-                    <td className="p-2 text-mute">{row.id}</td>
+                    <td className="truncate p-2 text-mute">{row.id}</td>
                     <td className="p-2">
                       <input
                         className={input}
@@ -225,11 +233,11 @@ export function CharactersPanel() {
                   </tr>
                 ) : (
                   <tr key={row.id} className="border-b border-cyan/10">
-                    <td className="p-2 text-mute">{row.id}</td>
-                    <td className="p-2 text-ink">{row.name}</td>
-                    <td className="p-2 text-mute">{row.designation}</td>
-                    <td className="p-2 text-mute">{row.href}</td>
-                    <td className="p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.id}</td>
+                    <td className="truncate p-2 text-ink">{row.name}</td>
+                    <td className="truncate p-2 text-mute">{row.designation}</td>
+                    <td className="truncate p-2 text-mute">{row.href}</td>
+                    <td className="truncate p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
                     <td className="whitespace-nowrap p-2">
                       <button onClick={() => startEdit(row)} className="mr-2 text-cyan hover:underline">
                         EDIT

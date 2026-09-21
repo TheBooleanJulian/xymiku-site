@@ -257,7 +257,19 @@ export function EventsPanel() {
         <p className="font-technical text-xs text-mute">LOADING...</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse font-technical text-xs">
+          <table className="w-full table-fixed border-collapse font-technical text-xs">
+            <colgroup>
+              <col className="w-[9%]" />
+              <col className="w-[13%]" />
+              <col className="w-[8%]" />
+              <col className="w-[8%]" />
+              <col className="w-[12%]" />
+              <col className="w-[10%]" />
+              <col className="w-[13%]" />
+              <col className="w-[9%]" />
+              <col className="w-[7%]" />
+              <col className="w-[11%]" />
+            </colgroup>
             <thead>
               <tr className="border-b border-cyan/15 text-left text-mute">
                 <th className="p-2">ID</th>
@@ -276,7 +288,7 @@ export function EventsPanel() {
               {rows.map((row) =>
                 editingId === row.id ? (
                   <tr key={row.id} className="border-b border-cyan/10">
-                    <td className="p-2 text-mute">{row.id}</td>
+                    <td className="truncate p-2 text-mute">{row.id}</td>
                     <td className="p-2">
                       <input
                         className={input}
@@ -375,15 +387,15 @@ export function EventsPanel() {
                   </tr>
                 ) : (
                   <tr key={row.id} className="border-b border-cyan/10">
-                    <td className="p-2 text-mute">{row.id}</td>
-                    <td className="p-2 text-ink">{row.name}</td>
-                    <td className="p-2 text-mute">{row.event_date}</td>
-                    <td className="p-2 text-mute">{row.status}</td>
-                    <td className="p-2 text-mute">{row.drive_folder_id || "—"}</td>
-                    <td className="p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
-                    <td className="max-w-[160px] truncate p-2 text-mute">{row.external_url ?? "—"}</td>
-                    <td className="p-2 text-mute">{row.cover_position}</td>
-                    <td className="p-2 text-mute">{row.image_count_override ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.id}</td>
+                    <td className="truncate p-2 text-ink">{row.name}</td>
+                    <td className="truncate p-2 text-mute">{row.event_date}</td>
+                    <td className="truncate p-2 text-mute">{row.status}</td>
+                    <td className="truncate p-2 text-mute">{row.drive_folder_id || "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.cover_drive_file_id ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.external_url ?? "—"}</td>
+                    <td className="truncate p-2 text-mute">{row.cover_position}</td>
+                    <td className="truncate p-2 text-mute">{row.image_count_override ?? "—"}</td>
                     <td className="whitespace-nowrap p-2">
                       <button onClick={() => startEdit(row)} className="mr-2 text-cyan hover:underline">
                         EDIT
