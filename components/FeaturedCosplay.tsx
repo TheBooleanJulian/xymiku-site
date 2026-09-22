@@ -1,5 +1,6 @@
 import type { UplinkImage } from "@/lib/types";
 import { UplinkPlaceholder } from "./UplinkPlaceholder";
+import { WorkInProgress } from "./WorkInProgress";
 
 export function FeaturedCosplay({ images: featuredCosplay }: { images: UplinkImage[] }) {
   return (
@@ -11,6 +12,8 @@ export function FeaturedCosplay({ images: featuredCosplay }: { images: UplinkIma
         <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
           FEATURED COSPLAY
         </h2>
+
+        {featuredCosplay.length === 0 && <WorkInProgress label="FEATURED COSPLAY" />}
 
         <div className="mt-10 columns-2 gap-3 sm:columns-3 lg:columns-3 [&>*]:mb-3">
           {featuredCosplay.map((image, i) => (

@@ -1,5 +1,6 @@
 import type { UplinkImage } from "@/lib/types";
 import { UplinkPlaceholder } from "./UplinkPlaceholder";
+import { WorkInProgress } from "./WorkInProgress";
 
 export function UplinkTimeline({ images: timelineImages }: { images: UplinkImage[] }) {
   return (
@@ -25,19 +26,25 @@ export function UplinkTimeline({ images: timelineImages }: { images: UplinkImage
         </p>
       </div>
 
-      <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:px-6 lg:gap-6">
-        {timelineImages.map((image) => (
-          <div
-            key={image.id}
-            className="w-[70vw] shrink-0 snap-start sm:w-[38vw] lg:w-[22vw]"
-          >
-            <p className="mb-2 font-display text-2xl font-bold text-cyan">
-              {image.year}
-            </p>
-            <UplinkPlaceholder image={image} className="aspect-[3/4]" />
-          </div>
-        ))}
-      </div>
+      {timelineImages.length > 0 ? (
+        <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:px-6 lg:gap-6">
+          {timelineImages.map((image) => (
+            <div
+              key={image.id}
+              className="w-[70vw] shrink-0 snap-start sm:w-[38vw] lg:w-[22vw]"
+            >
+              <p className="mb-2 font-display text-2xl font-bold text-cyan">
+                {image.year}
+              </p>
+              <UplinkPlaceholder image={image} className="aspect-[3/4]" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <WorkInProgress label="TIMELINE UPLINK" />
+        </div>
+      )}
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import type { CharacterCategory } from "@/lib/types";
 import { UplinkPlaceholder } from "./UplinkPlaceholder";
+import { WorkInProgress } from "./WorkInProgress";
 
 export function CharacterIndex({ characters: characterIndex }: { characters: CharacterCategory[] }) {
   return (
@@ -11,6 +12,8 @@ export function CharacterIndex({ characters: characterIndex }: { characters: Cha
         <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
           CATALOGUED COSTUMES
         </h2>
+
+        {characterIndex.length === 0 && <WorkInProgress label="CHARACTER INDEX" />}
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {characterIndex.map((c) => (
