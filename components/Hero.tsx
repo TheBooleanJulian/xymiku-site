@@ -20,13 +20,6 @@ const MIKU_LINES = ["MIKU", "IMAGES", "KAWAII", "UPLINK"];
 const HERO_CTAS = [
   { href: "#photo-delivery", title: "FIND YOUR PHOTOS", subtitle: "DOWNLOAD NOW" },
   { href: "#uplink", title: "EXPLORE THE UPLINK", subtitle: "COS ARCHIVE" },
-  { href: "#instagram", title: "INSTAGRAM UPLINK", subtitle: "LET'S COLLAB" },
-  {
-    href: "https://t.me/+Sf2gP6A4U7VkMWNl",
-    title: "MEEGOO CHANNEL",
-    subtitle: "LET'S TELE YAP",
-    external: true,
-  },
 ];
 
 const CTA_CLIP_PATH = "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)";

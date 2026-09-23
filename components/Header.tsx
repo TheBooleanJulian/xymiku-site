@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { label: "HOME", href: "/" },
   { label: "INSTAGRAM", href: "/#instagram" },
   { label: "FULL ARCHIVE", href: "/gallery" },
-  { label: "XYMIKU CATALOGUE", href: "/#uplink" },
+  { label: "XYMIKU COS ARCHIVE", href: "/#uplink" },
   {
     label: "MEEGOO TELE CHANNEL",
     href: "https://t.me/+Sf2gP6A4U7VkMWNl",
