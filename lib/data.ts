@@ -12,6 +12,7 @@ type EventRow = {
   external_url: string | null;
   cover_position: UplinkEvent["coverPosition"];
   image_count_override: number | null;
+  image_count: number | null;
 };
 
 type CuratedImageRow = {
@@ -94,14 +95,19 @@ export async function getRecentEvents(limit = 6): Promise<UplinkEvent[]> {
 }
 
 // Lists every event without querying LuxSync/Drive per row — building a
-// gallery link and (when set) a cover is free string-building, but a real
-// imageCount needs the Drive folder actually listed, and LuxSync's
-// /api/gallery is rate-limited to 20/min. Fine for the homepage's 6 "recent"
-// cards (getRecentEvents), not for potentially the whole archive at once.
+// gallery link and (when set) a cover is free string-building, but LuxSync's
+// /api/gallery is rate-limited to 20/min, so listing 80+ events' folders
+// live on every build isn't viable here the way it is for the homepage's 6
+// "recent" cards (getRecentEvents). Instead this reads the cached
+// `image_count` column, kept up to date by scripts/register-event.mjs (on
+// registration) and scripts/backfill-image-counts.mjs (for existing rows,
+// or after photos are added to an already-registered folder).
 export async function getAllEvents(): Promise<UplinkEvent[]> {
   const { data, error } = await supabase
     .from("events")
-    .select("id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position,image_count_override")
+    .select(
+      "id,name,event_date,status,drive_folder_id,cover_drive_file_id,external_url,cover_position,image_count_override,image_count",
+    )
     .order("event_date", { ascending: false });
   if (error) throw error;
 
@@ -109,7 +115,7 @@ export async function getAllEvents(): Promise<UplinkEvent[]> {
     id: row.id,
     name: row.name,
     date: formatDate(row.event_date),
-    imageCount: row.drive_folder_id ? 0 : (row.image_count_override ?? 0),
+    imageCount: row.drive_folder_id ? (row.image_count ?? 0) : (row.image_count_override ?? 0),
     status: row.status,
     cover: row.cover_drive_file_id ? driveThumbUrl(row.cover_drive_file_id) : "",
     coverPosition: row.cover_position,

@@ -30,6 +30,13 @@ create table if not exists events (
   -- via Pixieset/Lightroom instead of Drive) — there's no API to count
   -- those automatically. Leave unset to just hide the "N IMAGES" line.
   image_count_override int,
+  -- Cached count of files in drive_folder_id, as last computed by
+  -- scripts/register-event.mjs or scripts/backfill-image-counts.mjs.
+  -- Cached rather than computed live on /gallery because that page lists
+  -- every event at once, and LuxSync's /api/gallery is rate-limited to
+  -- 20/min — fine for one event (register-event.mjs) or six
+  -- (getRecentEvents), not for the whole archive per build.
+  image_count int,
   created_at timestamptz not null default now()
 );
 
@@ -97,3 +104,4 @@ alter table events add column if not exists cover_position text not null default
 alter table events drop constraint if exists events_cover_position_check;
 alter table events add constraint events_cover_position_check check (cover_position in ('top', 'center', 'bottom'));
 alter table events add column if not exists image_count_override int;
+alter table events add column if not exists image_count int;

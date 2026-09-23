@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "serve out -l ${PORT:-3000}",
     "lint": "eslint",
-    "register-event": "node scripts/register-event.mjs"
+    "register-event": "node scripts/register-event.mjs",
+    "backfill-image-counts": "node scripts/backfill-image-counts.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

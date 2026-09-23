@@ -34,6 +34,14 @@
 // Pixieset/Lightroom instead of Drive) — there's no API to count those
 // automatically, so the "N IMAGES" line is just hidden unless you set this.
 //
+// With --drive-folder-id, the count is instead fetched from LuxSync and
+// cached in events.image_count automatically (one API call, so no rate-
+// limit concern here — unlike /gallery listing every event's folder at
+// once). Re-run with the same args any time to refresh it after adding
+// more photos to the folder. If a folder already has many events needing
+// a refresh, use scripts/backfill-image-counts.mjs instead (it throttles
+// across LuxSync's 20/min limit).
+//
 // Requires .env.local with NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
 // (the service role key, NOT the anon key — RLS blocks writes from the anon key).
 
@@ -81,6 +89,25 @@ async function main() {
   if (args["external-url"]) row.external_url = args["external-url"];
   if (args["cover-position"]) row.cover_position = args["cover-position"];
   if (args["image-count"]) row.image_count_override = Number(args["image-count"]);
+
+  if (row.drive_folder_id) {
+    const luxsyncUrl = (process.env.NEXT_PUBLIC_LUXSYNC_URL ?? "https://luxsync-v3.thebooleanjulian.dev").replace(/\/$/, "");
+    try {
+      const res = await fetch(`${luxsyncUrl}/api/gallery`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider: "drive", source: row.drive_folder_id }),
+      });
+      if (res.ok) {
+        const { files } = await res.json();
+        row.image_count = files.length;
+      } else {
+        console.warn(`Couldn't fetch image count from LuxSync (${res.status}) — leaving it unset.`);
+      }
+    } catch (err) {
+      console.warn(`Couldn't fetch image count from LuxSync (${err.message}) — leaving it unset.`);
+    }
+  }
 
   const { error } = await supabase.from("events").upsert(row);
   if (error) throw error;
