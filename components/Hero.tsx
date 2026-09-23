@@ -235,8 +235,6 @@ export function Hero() {
               <a
                 key={cta.title}
                 href={cta.href}
-                target={cta.external ? "_blank" : undefined}
-                rel={cta.external ? "noopener" : undefined}
                 style={{ clipPath: CTA_CLIP_PATH, animationDelay: `-${i}s` }}
                 className="gradient-flow border border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-3 py-2 text-center text-black shadow-[0_0_12px_rgba(57,230,242,0.5)] transition-transform hover:scale-[1.02] sm:flex-1 sm:px-4 sm:py-2.5"
               >
