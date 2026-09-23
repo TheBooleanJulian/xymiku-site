@@ -20,13 +20,6 @@ const MIKU_LINES = ["MIKU", "IMAGES", "KAWAII", "UPLINK"];
 const HERO_CTAS = [
   { href: "#photo-delivery", title: "FIND YOUR PHOTOS", subtitle: "DOWNLOAD NOW" },
   { href: "#uplink", title: "EXPLORE THE UPLINK", subtitle: "COS ARCHIVE" },
-  { href: "#instagram", title: "INSTAGRAM UPLINK", subtitle: "LET'S COLLAB" },
-  {
-    href: "https://t.me/+Sf2gP6A4U7VkMWNl",
-    title: "MEEGOO CHANNEL",
-    subtitle: "LET'S TELE YAP",
-    external: true,
-  },
 ];
 
 const CTA_CLIP_PATH = "polygon(0 0, 100% 0, 100% 70%, calc(100% - 14px) 100%, 0 100%)";
@@ -242,8 +235,6 @@ export function Hero() {
               <a
                 key={cta.title}
                 href={cta.href}
-                target={cta.external ? "_blank" : undefined}
-                rel={cta.external ? "noopener" : undefined}
                 style={{ clipPath: CTA_CLIP_PATH, animationDelay: `-${i}s` }}
                 className="gradient-flow border border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-3 py-2 text-center text-black shadow-[0_0_12px_rgba(57,230,242,0.5)] transition-transform hover:scale-[1.02] sm:flex-1 sm:px-4 sm:py-2.5"
               >

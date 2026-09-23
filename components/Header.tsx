@@ -5,21 +5,15 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const NAV_ITEMS = [
   { label: "HOME", href: "/" },
+  { label: "INSTAGRAM", href: "/#instagram" },
   { label: "FULL ARCHIVE", href: "/gallery" },
-];
-
-const HEADER_CTAS = [
-  { href: "/#photo-delivery", title: "FIND YOUR PHOTOS" },
-  { href: "/#uplink", title: "EXPLORE THE UPLINK" },
-  { href: "/#instagram", title: "INSTAGRAM UPLINK" },
+  { label: "XYMIKU COS ARCHIVE", href: "/#uplink" },
   {
+    label: "MEEGOO TELE CHANNEL",
     href: "https://t.me/+Sf2gP6A4U7VkMWNl",
-    title: "MEEGOO CHANNEL",
     external: true,
   },
 ];
-
-const CTA_CLIP_PATH = "polygon(0 0, 100% 0, 100% 70%, calc(100% - 8px) 100%, 0 100%)";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -34,34 +28,19 @@ export function Header() {
           XYMIKU<span className="text-cyan">39</span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 md:ml-auto md:flex">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.label}
               href={item.href}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener" : undefined}
               className="font-technical text-[11px] tracking-[0.15em] text-mute transition-colors hover:text-cyan"
             >
               {item.label}
             </a>
           ))}
         </nav>
-
-        <div className="hidden items-center gap-2 xl:flex">
-          {HEADER_CTAS.map((cta) => (
-            <a
-              key={cta.title}
-              href={cta.href}
-              target={cta.external ? "_blank" : undefined}
-              rel={cta.external ? "noopener" : undefined}
-              style={{ clipPath: CTA_CLIP_PATH }}
-              className="gradient-flow border border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-2.5 py-1.5 text-center text-black shadow-[0_0_8px_rgba(57,230,242,0.4)] transition-transform hover:scale-[1.03]"
-            >
-              <span className="block font-display text-[9px] font-bold tracking-[0.05em] whitespace-nowrap">
-                {cta.title}
-              </span>
-            </a>
-          ))}
-        </div>
 
         <button
           type="button"
@@ -100,6 +79,8 @@ export function Header() {
                 <li key={item.label}>
                   <a
                     href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener" : undefined}
                     onClick={() => setOpen(false)}
                     className="block py-2 font-technical text-xs tracking-[0.15em] text-mute hover:text-cyan"
                   >
@@ -108,24 +89,6 @@ export function Header() {
                 </li>
               ))}
             </ul>
-
-            <div className="grid grid-cols-2 gap-2 px-4 pb-4">
-              {HEADER_CTAS.map((cta) => (
-                <a
-                  key={cta.title}
-                  href={cta.href}
-                  target={cta.external ? "_blank" : undefined}
-                  rel={cta.external ? "noopener" : undefined}
-                  onClick={() => setOpen(false)}
-                  style={{ clipPath: CTA_CLIP_PATH }}
-                  className="gradient-flow border border-cyan bg-gradient-to-r from-cyan via-signal to-cyan px-2.5 py-2 text-center text-black shadow-[0_0_8px_rgba(57,230,242,0.4)]"
-                >
-                  <span className="block font-display text-[9px] font-bold tracking-[0.05em]">
-                    {cta.title}
-                  </span>
-                </a>
-              ))}
-            </div>
           </motion.nav>
         )}
       </AnimatePresence>

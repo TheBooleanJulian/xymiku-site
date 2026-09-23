@@ -6,62 +6,53 @@
 
 **MIKU IMAGES KAWAII UPLINK (M.I.K.U.)**
 
-A photography portfolio site for a Hatsune Miku cosplay photographer, styled
-as a retro-futuristic "archive console" — boot sequences, scanlines,
-HUD-style corner brackets, waveform decorations, and terminal/diagnostics
-jargon framing each gallery as a piece of retrieved signal data. "39" recurs
-throughout as the site's signature motif.
-
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+![License](https://img.shields.io/badge/license-AGPLv3%20%2B%20Commercial-00D4C8.svg)
 
 </div>
 
 ---
 
+## What it does
+
+A photography portfolio site for a Hatsune Miku cosplay photographer, styled as a retro-futuristic "archive console" — boot sequences, scanlines, HUD-style corner brackets, waveform decorations, and terminal/diagnostics jargon framing each gallery as a piece of retrieved signal data. "39" recurs throughout as the site's signature motif.
+
+## Features
+
+- **Boot-sequence hero** — an animated diagnostic startup screen gives way to the main hero, flanked by HUD side panels (capture-module dials, uplink signal waveform, live parameter readouts).
+- **System diagnostics strip** — a stat grid (camera body, sensor resolution, archive size, years active) framed as machine telemetry rather than a plain "about" blurb.
+- **Photo delivery search** — a "find your photos" bar for looking up a shoot by event / cosplayer / character (UI complete, backend not yet wired — see roadmap).
+- **Uplink timeline** — a horizontal-scrolling history of past shoots by year.
+- **Character index** — a catalogued grid of cosplayed characters with per-character shoot counts and codes.
+- **Featured cosplay & portfolio** — masonry-style featured-work grid plus categorized portfolio sections.
+- **Sticky HUD navigation** — animated mobile hamburger menu, in-page anchor links to every section.
+- **Fully responsive HUD chrome** — scanlines, corner brackets, and waveform decorations that hold up across viewport sizes.
+
+## Tech Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org) (App Router, static export target) |
+| UI | [React 19](https://react.dev) |
+| Language | TypeScript |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) (`@theme` design tokens in `app/globals.css` — cyan/black HUD palette) |
+| Animation | [Framer Motion](https://www.framer.com/motion/) for boot-sequence and scroll animations |
+| Backend/data | [Supabase](https://supabase.com) client (`@supabase/supabase-js`) |
+| Fonts | Space Grotesk (display) + JetBrains Mono (technical/HUD text) |
+| Deployment target | [Zeabur](https://zeabur.com) (prebuilt static export) |
+
 ## Screenshots
 
-![Horizontal-scroll shoot timeline above a grid of cosplayed characters](.github/assets/timeline-and-characters.png)
+|                               System diagnostics & photo search                                |                                 Uplink timeline & character index                                  |
+| :----------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
+| ![Stat grid framed as system diagnostics, plus the find-your-photos search bar](.github/assets/system-diagnostics.png) | ![Horizontal-scroll shoot timeline above a grid of cosplayed characters](.github/assets/timeline-and-characters.png) |
 
 > Every panel above is real UI, rendered live — but every *image* in it (thumbnails,
 > character cards) is currently a generated CSS gradient standing in for a real
 > photo. See [Current State](#current-state) below.
-
-## Tech Stack
-
-- [Next.js 16](https://nextjs.org) (App Router, static export target)
-- [React 19](https://react.dev)
-- TypeScript
-- [Tailwind CSS v4](https://tailwindcss.com) (`@theme` design tokens in
-  `app/globals.css` — cyan/black HUD palette)
-- [Framer Motion](https://www.framer.com/motion/) for boot-sequence and
-  scroll animations
-- Fonts: Space Grotesk (display) + JetBrains Mono (technical/HUD text)
-- Deployment target: [Zeabur](https://zeabur.com) (prebuilt static export)
-
-## Features
-
-- **Boot-sequence hero** — an animated diagnostic startup screen gives way to
-  the main hero, flanked by HUD side panels (capture-module dials, uplink
-  signal waveform, live parameter readouts), with CTAs to the photo search,
-  the timeline, and the Instagram feed.
-- **Instagram feed** — an auto-scrolling marquee of recent @xymiku.39 posts
-  (photo + caption preview), fetched at build time from an RSS.app feed, sat
-  between the hero and the photo search.
-- **Photo delivery search** — a "find your photos" bar for looking up a shoot
-  by event / cosplayer / character (UI complete, backend not yet wired — see
-  roadmap).
-- **Uplink timeline** — a horizontal-scrolling history of past shoots by
-  year.
-- **Character index** — a catalogued grid of cosplayed characters with
-  per-character shoot counts and codes.
-- **Featured cosplay** — masonry-style featured-work grid.
-- **Sticky HUD navigation** — animated mobile hamburger menu, in-page anchor
-  links to every section.
-- **Fully responsive HUD chrome** — scanlines, corner brackets, and waveform
-  decorations that hold up across viewport sizes.
 
 ## Current State
 
@@ -84,7 +75,7 @@ photo** — all content (timeline entries, character list, featured work) is
 sourced from a single static file, `lib/mock-data.ts`, which is explicitly
 commented as mock/placeholder data.
 
-## Getting Started
+## Setup / Quick Start
 
 > **Note:** if your working copy lives under a synced cloud-drive folder
 > (Google Drive, OneDrive, etc.), `npm install` can fail or behave
@@ -93,6 +84,7 @@ commented as mock/placeholder data.
 
 ```bash
 npm install
+cp .env.local.example .env.local   # fill in your Supabase values
 npm run dev
 ```
 
@@ -205,8 +197,21 @@ changes are recorded below; dates reflect the corresponding commit.
   listed in [Current State](#current-state) built against mock data.
 - Static export enabled for Zeabur prebuilt deployment.
 
+## License
+
+This project is dual licensed.
+
+- Community Edition — [GNU Affero General Public License v3 (AGPLv3)](LICENSE). Free to use, modify, and self-host. If you distribute a modified version or run it as a network service, you must make the corresponding source available.
+- Commercial License — for organisations that want to embed, modify, or distribute this software without AGPLv3's obligations. See [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md).
+
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
 - [Framer Motion Documentation](https://www.framer.com/motion/)
+
+---
+
+<div align="center">
+<sub>Built by <a href="https://github.com/TheBooleanJulian">@TheBooleanJulian</a></sub>
+</div>

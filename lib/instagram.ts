@@ -6,71 +6,63 @@ export type InstagramPost = {
   publishedAt: string | null;
 };
 
-// Two sources, tried in order, both fetched only at build time (static
-// export — there's no server to hit these per-request):
-//
-// 1. Instagram's own Graph API ("Instagram API with Instagram Login"),
-//    used when INSTAGRAM_ACCESS_TOKEN is set. No RSS.app item cap — can
-//    pull up to GRAPH_LIMIT posts. The token expires ~60 days from
-//    generation and needs manually regenerating (Meta App Dashboard ->
-//    Instagram -> API setup -> Generate token) — see README Maintenance.
-// 2. The RSS.app JSON feed, used whenever there's no token or the Graph
-//    API call fails for any reason (bad/expired token, rate limit, etc).
-//    Capped at 6 items on this RSS.app plan; its photo URLs are signed
-//    Instagram CDN links that expire in a few days (see README).
+// Primary source: Meta Graph API (Instagram Business/Creator account).
+// Not set up yet — INSTAGRAM_ACCESS_TOKEN / INSTAGRAM_BUSINESS_ACCOUNT_ID
+// are unset in production, so getInstagramFeed() falls through to the RSS
+// feed below until this is configured.
+const META_GRAPH_VERSION = "v21.0";
+const META_ACCESS_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
+const META_BUSINESS_ACCOUNT_ID = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID;
 
-const GRAPH_ACCESS_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
-const GRAPH_LIMIT = 30;
-
-const RSS_FEED_URL = "https://rss.app/feeds/v1.1/9NH3qtc3KAQCoiuj.json";
-
-type GraphMediaItem = {
+type MetaMediaItem = {
   id: string;
   caption?: string;
   media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
-  media_url: string;
+  media_url?: string;
   thumbnail_url?: string;
   permalink: string;
   timestamp: string;
 };
 
-type GraphResponse = {
-  data?: GraphMediaItem[];
+type MetaMediaResponse = {
+  data?: MetaMediaItem[];
+  error?: { message: string };
 };
 
-async function getFromGraphApi(): Promise<InstagramPost[] | null> {
-  if (!GRAPH_ACCESS_TOKEN) return null;
+async function getMetaFeed(): Promise<InstagramPost[]> {
+  if (!META_ACCESS_TOKEN || !META_BUSINESS_ACCOUNT_ID) return [];
 
-  try {
-    const url = new URL("https://graph.instagram.com/me/media");
-    url.searchParams.set(
-      "fields",
-      "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp",
-    );
-    url.searchParams.set("limit", String(GRAPH_LIMIT));
-    url.searchParams.set("access_token", GRAPH_ACCESS_TOKEN);
+  const url =
+    `https://graph.facebook.com/${META_GRAPH_VERSION}/${META_BUSINESS_ACCOUNT_ID}/media` +
+    `?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp` +
+    `&access_token=${META_ACCESS_TOKEN}`;
 
-    const res = await fetch(url.toString());
-    if (!res.ok) return null;
-    const data = (await res.json()) as GraphResponse;
-    if (!data.data) return null;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const data = (await res.json()) as MetaMediaResponse;
+  if (data.error) return [];
 
-    // A VIDEO's media_url points at the video file itself, not a still —
-    // thumbnail_url is the frame to show. Skip any video missing one
-    // rather than rendering a broken <img>.
-    return data.data
-      .filter((item) => item.media_type !== "VIDEO" || item.thumbnail_url)
-      .map((item) => ({
-        id: item.id,
-        url: item.permalink,
-        image: item.media_type === "VIDEO" ? item.thumbnail_url! : item.media_url,
-        caption: (item.caption ?? "").trim(),
-        publishedAt: item.timestamp,
-      }));
-  } catch {
-    return null;
-  }
+  return (data.data ?? [])
+    .filter((item) => item.media_type !== "VIDEO")
+    .map((item) => ({
+      id: item.id,
+      url: item.permalink,
+      image: item.media_type === "VIDEO" ? (item.thumbnail_url ?? "") : (item.media_url ?? ""),
+      caption: (item.caption ?? "").trim(),
+      publishedAt: item.timestamp,
+    }))
+    .filter((post) => Boolean(post.image));
 }
+
+// Fallback source: JSON Feed (v1.1) for instagram.com/xymiku.39, generated
+// by RSS.app since Instagram has no native feed. This tier's feed caps at 6
+// items — getting more requires upgrading the RSS.app plan for this feed.
+//
+// Fetched only at build time (static export): the photo URLs are signed
+// Instagram CDN links that expire after a few days, so this section only
+// stays fresh across redeploys, not indefinitely. See the scheduled-rebuild
+// setup (README) for keeping it current automatically.
+const RSS_FEED_URL = "https://rss.app/feeds/v1.1/9NH3qtc3KAQCoiuj.json";
 
 type JsonFeedItem = {
   id: string;
@@ -85,28 +77,33 @@ type JsonFeed = {
   items?: JsonFeedItem[];
 };
 
-async function getFromRssFallback(): Promise<InstagramPost[]> {
-  try {
-    const res = await fetch(RSS_FEED_URL);
-    if (!res.ok) return [];
-    const data = (await res.json()) as JsonFeed;
+async function getRssFeed(): Promise<InstagramPost[]> {
+  const res = await fetch(RSS_FEED_URL);
+  if (!res.ok) return [];
+  const data = (await res.json()) as JsonFeed;
 
-    return (data.items ?? [])
-      .filter((item): item is JsonFeedItem & { image: string } => Boolean(item.image))
-      .map((item) => ({
-        id: item.id,
-        url: item.url,
-        image: item.image,
-        caption: (item.content_text ?? item.title ?? "").trim(),
-        publishedAt: item.date_published ?? null,
-      }));
-  } catch {
-    return [];
-  }
+  return (data.items ?? [])
+    .filter((item): item is JsonFeedItem & { image: string } => Boolean(item.image))
+    .map((item) => ({
+      id: item.id,
+      url: item.url,
+      image: item.image,
+      caption: (item.content_text ?? item.title ?? "").trim(),
+      publishedAt: item.date_published ?? null,
+    }));
 }
 
 export async function getInstagramFeed(): Promise<InstagramPost[]> {
-  const graphPosts = await getFromGraphApi();
-  if (graphPosts && graphPosts.length > 0) return graphPosts;
-  return getFromRssFallback();
+  try {
+    const metaPosts = await getMetaFeed();
+    if (metaPosts.length > 0) return metaPosts;
+  } catch {
+    // fall through to RSS
+  }
+
+  try {
+    return await getRssFeed();
+  } catch {
+    return [];
+  }
 }
