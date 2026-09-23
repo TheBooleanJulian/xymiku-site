@@ -71,7 +71,7 @@ The homepage (`app/page.tsx`) composes these components in order:
 |---|---|---|
 | `Header` | Done | Sticky nav with an animated mobile hamburger menu; links to real in-page anchors. |
 | `Hero` | Built, mock content | Animated boot sequence, HUD side panels, waveform decorations, three CTAs (photo search, uplink timeline, Instagram). |
-| `InstagramFeed` | Built, real data | Infinite-scroll marquee of the 6 most recent @xymiku.39 posts, fetched at build time (`lib/instagram.ts`). See [Maintenance](#maintenance). |
+| `InstagramFeed` | Built, real data | Infinite-scroll marquee of @xymiku.39 posts, fetched at build time from the Graph API (primary, once configured) or RSS.app (fallback, 6-post cap) — `lib/instagram.ts`. See [Maintenance](#maintenance). |
 | `PhotoDelivery` | UI done, not wired up | A "find your photos" search form — currently a no-op (`preventDefault` only, no real search). |
 | `UplinkTimeline` | Built, mock content | Horizontal-scroll timeline of shoot history. |
 | `UplinkPlaceholder` | **Explicit placeholder** | Renders a generated gradient in place of a real photo — a documented stand-in until the archive is wired to real images. |
@@ -108,23 +108,53 @@ Open [http://localhost:3000](http://localhost:3000) to see it. Edit
 
 ## Maintenance
 
-**Instagram feed image staleness.** `lib/instagram.ts` fetches
-`https://rss.app/feeds/v1.1/9NH3qtc3KAQCoiuj.json` at build time. That feed
-returns Instagram's own CDN URLs for each photo, and those URLs are signed
-and expire after roughly 4-5 days. Since this site is a static export
-(built once, deployed as flat files, no server), the Instagram section's
-photos will 404 once their URLs expire — until the next build re-fetches
-the feed with fresh URLs.
+### Instagram feed sources
+
+`lib/instagram.ts` tries two sources, in order, both fetched at build time
+only (static export — no server to hit these per-request):
+
+1. **Instagram Graph API** ("Instagram API with Instagram Login"), used
+   when `INSTAGRAM_ACCESS_TOKEN` is set. No item cap — pulls up to 30
+   posts. This is the intended primary source once set up.
+2. **RSS.app JSON feed**, used automatically whenever there's no token or
+   the Graph API call fails for any reason. Capped at 6 posts on this
+   RSS.app plan — raising that needs an RSS.app plan upgrade, not a code
+   change.
+
+If neither source returns anything, the section falls back to a
+"SIGNAL OFFLINE" card linking to the profile instead of an empty section.
+
+#### Setting up the Graph API token (one-time)
+
+1. xymiku.39's Instagram account must be a **Professional** account
+   (Creator or Business) — Instagram app -> Settings -> Account type.
+2. Create a Meta app at developers.facebook.com/apps, type **Business**.
+3. In the app dashboard, add the **Instagram** product, then go to
+   **Instagram -> API setup with Instagram Login**.
+4. Click **Generate token**, log in as xymiku.39, authorize. This hands
+   you a token valid for **60 days** (no separate long-lived exchange
+   needed).
+5. Set it as `INSTAGRAM_ACCESS_TOKEN` in **both**:
+   - `.env.local` (local dev)
+   - Zeabur's project environment variables (production build — required,
+     since Zeabur runs the actual build that ships)
+
+The token expires every ~60 days. Refreshing is a manual repeat of step 4
+(regenerate, then update it in both places above) unless/until that gets
+automated.
+
+### Image staleness (either source)
+
+Both sources return temporary, signed CDN URLs for each photo — RSS.app's
+expire in roughly 4-5 days; Graph API's `media_url` also expires, on a
+similar order. Since this site is a static export (built once, deployed as
+flat files, no server), the Instagram section's photos will 404 once their
+URLs expire, until the next build re-fetches fresh ones.
 
 `.github/workflows/refresh-instagram-feed.yml` covers this: it pushes an
 empty commit daily, which retriggers Zeabur's git-push-based auto-deploy
 and so re-runs the build. No manual action needed as long as that workflow
 stays enabled and Zeabur stays connected to this repo.
-
-**6-item cap.** The RSS.app feed only returns the 6 most recent posts —
-raising that requires upgrading the RSS.app plan for this feed, not a code
-change. The marquee loops those 6 seamlessly rather than showing ~30
-distinct posts.
 
 ## Roadmap
 
