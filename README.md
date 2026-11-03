@@ -42,7 +42,7 @@ A photography portfolio site for a Hatsune Miku cosplay photographer, styled as 
 | Animation | [Framer Motion](https://www.framer.com/motion/) for boot-sequence and scroll animations |
 | Backend/data | [Supabase](https://supabase.com) client (`@supabase/supabase-js`) |
 | Fonts | Space Grotesk (display) + JetBrains Mono (technical/HUD text) |
-| Deployment target | [Zeabur](https://zeabur.com) (prebuilt static export) |
+| Deployment target | [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/) (static export in `out/`, Workers Builds) |
 
 ## Screenshots
 
@@ -128,8 +128,8 @@ If neither source returns anything, the section falls back to a
    needed).
 5. Set it as `INSTAGRAM_ACCESS_TOKEN` in **both**:
    - `.env.local` (local dev)
-   - Zeabur's project environment variables (production build — required,
-     since Zeabur runs the actual build that ships)
+   - the Cloudflare Workers Build variables for `xymiku-site` (production
+     build — required, since Workers Builds runs the actual build that ships)
 
 The token expires every ~60 days. Refreshing is a manual repeat of step 4
 (regenerate, then update it in both places above) unless/until that gets
@@ -144,9 +144,9 @@ flat files, no server), the Instagram section's photos will 404 once their
 URLs expire, until the next build re-fetches fresh ones.
 
 `.github/workflows/refresh-instagram-feed.yml` covers this: it pushes an
-empty commit daily, which retriggers Zeabur's git-push-based auto-deploy
-and so re-runs the build. No manual action needed as long as that workflow
-stays enabled and Zeabur stays connected to this repo.
+empty commit daily, which retriggers Cloudflare Workers Builds (redeploy on
+push to `master`) and so re-runs the build. No manual action needed as long
+as that workflow stays enabled and the repo stays connected in Workers Builds.
 
 ## Roadmap
 
@@ -168,7 +168,10 @@ Rough order, subject to change:
       the boot-sequence/scroll animations.
 - [ ] **Mobile QA** — verify the HUD layout, waveforms, and horizontal
       timeline scroll at small viewport widths.
-- [ ] **Deployment** — Zeabur deploy + custom domain.
+- [x] **Deployment** — Cloudflare Workers (static assets, `wrangler.jsonc`),
+      preview at https://xymiku-site.xymiku39.workers.dev (moved off Zeabur 2026-11).
+- [ ] **Custom domain** — route `xymiku39.com` to the Worker at go-live (it
+      redirects to Notion until then).
 - [ ] **Analytics** (optional) — basic visit/engagement tracking once the
       site is live with real content.
 
