@@ -1,0 +1,16 @@
+{
+  // XYMiku39 site on Cloudflare Workers (static assets only), replacing the prebuilt deploy on Zeabur.
+  // `next build` is a static export (next.config.ts) into out/; Workers Builds runs it via build.command.
+  // Build variables (Workers & Pages → xymiku-site → Settings → Builds → Variables): the NEXT_PUBLIC_* and
+  // INSTAGRAM_* names in .env.local.example. SUPABASE_SERVICE_ROLE_KEY is NOT a build variable (scripts only).
+  // xymiku39.com is deliberately not routed here yet: it still redirects to Notion until the site goes live.
+  "name": "xymiku-site",
+  "account_id": "d330520210c29106bb9759d3a768d1c7",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "build": { "command": "npm run build" },
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}

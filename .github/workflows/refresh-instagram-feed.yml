@@ -6,9 +6,9 @@ name: Refresh Instagram feed
 # static export (deployed once, no server) — so without a periodic rebuild,
 # those images go stale and 404 until the next real deploy.
 #
-# This pushes an empty commit on a schedule purely to retrigger Zeabur's
-# git-push-based auto-deploy, which re-runs `next build` and re-fetches a
-# fresh feed. It changes nothing in the repo except a commit.
+# This pushes an empty commit on a schedule purely to retrigger Cloudflare
+# Workers Builds (redeploys on push to master), which re-runs `next build` and
+# re-fetches a fresh feed. It changes nothing in the repo except a commit.
 
 on:
   schedule:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Push empty commit to trigger a Zeabur rebuild
+      - name: Push empty commit to trigger a Workers Builds rebuild
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
